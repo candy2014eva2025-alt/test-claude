@@ -1,655 +1,676 @@
 <template>
   <div class="balance-page">
-    <!-- 顶部汇总卡片 -->
-    <el-row :gutter="16" class="summary-row">
-      <el-col v-for="card in summaryCards" :key="card.key" :xs="24" :sm="12" :lg="6">
-        <div class="summary-card" :class="`summary-card--${card.theme}`">
-          <div class="summary-card__icon">
-            <el-icon :size="28"><component :is="card.icon" /></el-icon>
+
+    <!-- ── Estimated Total Banner ─────────────────────────────────────────── -->
+    <div class="total-banner">
+      <div class="total-banner__left">
+        <div class="total-banner__label">Estimated Total</div>
+        <div class="total-banner__amount">
+          <span v-if="totalLoading" class="skeleton total-skeleton" />
+          <template v-else>
+            <span class="total-banner__number">{{ estimatedTotal }}</span>
+            <el-select
+              v-model="totalCurrency"
+              size="small"
+              class="currency-select"
+              @change="onCurrencyChange"
+            >
+              <el-option v-for="c in currencyList" :key="c" :label="c" :value="c" />
+            </el-select>
+          </template>
+        </div>
+        <div class="total-banner__sub">
+          Your total balance estimate in
+          <b>{{ totalCurrency }}</b> at {{ refreshTime }}
+          <el-button
+            :icon="Refresh"
+            size="small"
+            circle
+            plain
+            class="refresh-btn"
+            :loading="totalLoading"
+            @click="loadAll"
+          />
+        </div>
+      </div>
+
+      <!-- Mini stat pills -->
+      <div class="total-banner__stats">
+        <div class="stat-pill stat-pill--green">
+          <span class="stat-pill__label">Available</span>
+          <span class="stat-pill__value">{{ totalAvailable }} {{ totalCurrency }}</span>
+        </div>
+        <div class="stat-pill stat-pill--orange">
+          <span class="stat-pill__label">Frozen</span>
+          <span class="stat-pill__value">{{ totalFrozen }} {{ totalCurrency }}</span>
+        </div>
+        <div class="stat-pill stat-pill--blue">
+          <span class="stat-pill__label">Pending</span>
+          <span class="stat-pill__value">{{ totalPending }} {{ totalCurrency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Balances Section ────────────────────────────────────────────────── -->
+    <div class="balances-section">
+      <div class="section-header">
+        <h2 class="section-title">Balances</h2>
+
+        <div class="section-toolbar">
+          <el-input
+            v-model="searchKeyword"
+            placeholder="Search currency..."
+            :prefix-icon="Search"
+            clearable
+            size="small"
+            class="search-input"
+          />
+          <el-checkbox v-model="hideZero" class="hide-zero-check">
+            Hide zero balance
+          </el-checkbox>
+          <el-button size="small" :icon="Download" plain @click="handleExport">
+            Export
+          </el-button>
+        </div>
+      </div>
+
+      <!-- Loading skeleton -->
+      <template v-if="listLoading">
+        <div v-for="n in 3" :key="n" class="balance-card balance-card--skeleton">
+          <div class="skeleton sk-icon" />
+          <div class="sk-lines">
+            <div class="skeleton sk-line sk-line--wide" />
+            <div class="skeleton sk-line sk-line--narrow" />
           </div>
-          <div class="summary-card__body">
-            <span class="summary-card__label">{{ card.label }}</span>
-            <div class="summary-card__value">
-              <span v-if="summaryLoading" class="skeleton-text" />
-              <template v-else>
-                <span class="summary-card__currency">$</span>
-                {{ formatAmount(summary[card.key]) }}
-              </template>
+        </div>
+      </template>
+
+      <!-- Empty state -->
+      <el-empty
+        v-else-if="filteredBalances.length === 0"
+        description="No balances found"
+        :image-size="120"
+        class="empty-state"
+      />
+
+      <!-- Balance cards -->
+      <template v-else>
+        <div
+          v-for="item in filteredBalances"
+          :key="item.currency"
+          class="balance-card"
+          :class="{ 'balance-card--zero': item.total === 0 }"
+        >
+          <!-- Left: icon + amounts -->
+          <div class="balance-card__main">
+            <div class="balance-card__icon-wrap">
+              <img
+                :src="item.icon"
+                :alt="item.currency"
+                class="balance-card__icon"
+                @error="onImgError($event, item)"
+              />
             </div>
-            <div class="summary-card__trend" v-if="!summaryLoading">
-              <el-icon :class="summary[card.trendKey] >= 0 ? 'trend-up' : 'trend-down'">
-                <component :is="summary[card.trendKey] >= 0 ? 'ArrowUp' : 'ArrowDown'" />
-              </el-icon>
-              <span :class="summary[card.trendKey] >= 0 ? 'trend-up' : 'trend-down'">
-                {{ Math.abs(summary[card.trendKey] || 0).toFixed(2) }}% vs yesterday
+
+            <div class="balance-card__info">
+              <div class="balance-card__primary">
+                <span class="balance-card__amount">{{ formatCrypto(item.total) }}</span>
+                <span class="balance-card__currency">{{ item.currency }}</span>
+                <el-tag
+                  v-if="item.network"
+                  size="small"
+                  effect="plain"
+                  class="network-tag"
+                >{{ item.network }}</el-tag>
+              </div>
+              <div class="balance-card__usd">≈ $ {{ formatUSD(item.usdValue) }}</div>
+            </div>
+          </div>
+
+          <!-- Middle: balance breakdown -->
+          <div class="balance-card__breakdown">
+            <div class="breakdown-item">
+              <span class="breakdown-label">Available</span>
+              <span class="breakdown-value breakdown-value--available">
+                {{ formatCrypto(item.available) }}
+              </span>
+            </div>
+            <div class="breakdown-divider" />
+            <div class="breakdown-item">
+              <span class="breakdown-label">Frozen</span>
+              <span class="breakdown-value breakdown-value--frozen">
+                {{ formatCrypto(item.frozen) }}
+              </span>
+            </div>
+            <div class="breakdown-divider" />
+            <div class="breakdown-item">
+              <span class="breakdown-label">Pending</span>
+              <span class="breakdown-value breakdown-value--pending">
+                {{ formatCrypto(item.pending) }}
               </span>
             </div>
           </div>
+
+          <!-- Right: actions -->
+          <div class="balance-card__actions">
+            <el-button
+              size="small"
+              type="primary"
+              plain
+              :icon="Tickets"
+              @click="handlePayout(item)"
+            >Payout</el-button>
+            <el-button
+              size="small"
+              type="warning"
+              plain
+              :icon="Upload"
+              @click="handleWithdraw(item)"
+            >Withdraw</el-button>
+            <el-button
+              size="small"
+              plain
+              :icon="Clock"
+              @click="handleHistory(item)"
+            >History</el-button>
+          </div>
         </div>
-      </el-col>
-    </el-row>
+      </template>
+    </div>
 
-    <!-- 趋势图 + 资产分布 -->
-    <el-row :gutter="16" class="chart-row">
-      <el-col :xs="24" :lg="16">
-        <el-card shadow="never" class="chart-card">
-          <template #header>
-            <div class="card-header">
-              <span class="card-title">Balance Trend</span>
-              <el-radio-group v-model="trendRange" size="small" @change="loadTrend">
-                <el-radio-button label="7d">7D</el-radio-button>
-                <el-radio-button label="30d">30D</el-radio-button>
-                <el-radio-button label="90d">90D</el-radio-button>
-              </el-radio-group>
-            </div>
-          </template>
-          <BalanceTrendChart :data="trendData" height="280px" />
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :lg="8">
-        <el-card shadow="never" class="chart-card">
-          <template #header>
-            <div class="card-header">
-              <span class="card-title">Asset Distribution</span>
-            </div>
-          </template>
-          <div ref="pieChartRef" style="height:280px" />
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- 余额列表 + 交易记录 -->
-    <el-row :gutter="16" class="table-row">
-      <el-col :xs="24" :lg="12">
-        <el-card shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span class="card-title">Balance by Currency</span>
-              <el-button type="primary" size="small" plain @click="loadBalanceList">
-                <el-icon><Refresh /></el-icon> Refresh
-              </el-button>
-            </div>
-          </template>
-
-          <el-table
-            :data="balanceList"
-            v-loading="balanceLoading"
-            stripe
-            size="small"
-            class="balance-table"
-          >
-            <el-table-column label="Currency" min-width="110">
-              <template #default="{ row }">
-                <div class="currency-cell">
-                  <img :src="row.icon" class="currency-icon" :alt="row.currency" />
-                  <div>
-                    <div class="currency-name">{{ row.currency }}</div>
-                    <div class="currency-fullname">{{ row.fullName }}</div>
-                  </div>
-                </div>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Available" align="right" min-width="110">
-              <template #default="{ row }">
-                <span class="amount-text">{{ formatCryptoAmount(row.available) }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Frozen" align="right" min-width="100">
-              <template #default="{ row }">
-                <span class="amount-text frozen">{{ formatCryptoAmount(row.frozen) }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="USD Value" align="right" min-width="110">
-              <template #default="{ row }">
-                <span class="amount-usd">${{ formatAmount(row.usdValue) }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Change 24h" align="right" min-width="100">
-              <template #default="{ row }">
-                <span :class="row.change24h >= 0 ? 'change-up' : 'change-down'">
-                  {{ row.change24h >= 0 ? '+' : '' }}{{ row.change24h?.toFixed(2) }}%
-                </span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :lg="12">
-        <el-card shadow="never">
-          <template #header>
-            <div class="card-header">
-              <span class="card-title">Recent Transactions</span>
-              <el-button type="primary" size="small" plain @click="handleExport">
-                <el-icon><Download /></el-icon> Export
-              </el-button>
-            </div>
-          </template>
-
-          <!-- 筛选条件 -->
-          <div class="filter-bar">
-            <el-select
-              v-model="txFilter.currency"
-              placeholder="All Currencies"
-              size="small"
-              clearable
-              style="width:140px"
-              @change="loadTransactions"
-            >
-              <el-option
-                v-for="item in currencyOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-
-            <el-select
-              v-model="txFilter.type"
-              placeholder="All Types"
-              size="small"
-              clearable
-              style="width:130px"
-              @change="loadTransactions"
-            >
-              <el-option label="Deposit" value="deposit" />
-              <el-option label="Withdrawal" value="withdrawal" />
-              <el-option label="Transfer" value="transfer" />
-              <el-option label="Fee" value="fee" />
-            </el-select>
-
-            <el-date-picker
-              v-model="txFilter.dateRange"
-              type="daterange"
-              size="small"
-              range-separator="-"
-              start-placeholder="Start"
-              end-placeholder="End"
-              style="width:220px"
-              value-format="YYYY-MM-DD"
-              @change="loadTransactions"
-            />
-          </div>
-
-          <el-table
-            :data="transactions"
-            v-loading="txLoading"
-            stripe
-            size="small"
-            class="tx-table"
-          >
-            <el-table-column label="Time" width="150">
-              <template #default="{ row }">
-                <span class="time-text">{{ row.time }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Type" width="90">
-              <template #default="{ row }">
-                <el-tag
-                  :type="txTypeTag(row.type)"
-                  size="small"
-                  effect="light"
-                >{{ row.type }}</el-tag>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Currency" width="80" align="center">
-              <template #default="{ row }">
-                <span class="currency-badge">{{ row.currency }}</span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Amount" align="right">
-              <template #default="{ row }">
-                <span :class="row.direction === 'in' ? 'amount-in' : 'amount-out'">
-                  {{ row.direction === 'in' ? '+' : '-' }}{{ formatCryptoAmount(row.amount) }}
-                </span>
-              </template>
-            </el-table-column>
-
-            <el-table-column label="Status" width="90" align="center">
-              <template #default="{ row }">
-                <el-tag :type="statusTag(row.status)" size="small">{{ row.status }}</el-tag>
-              </template>
-            </el-table-column>
-          </el-table>
-
-          <div class="pagination-bar">
-            <el-pagination
-              v-model:current-page="txPagination.page"
-              v-model:page-size="txPagination.pageSize"
-              :total="txPagination.total"
-              :page-sizes="[10, 20, 50]"
-              layout="total, sizes, prev, pager, next"
-              small
-              @size-change="loadTransactions"
-              @current-change="loadTransactions"
-            />
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Wallet, Money, Lock, TrendCharts, Refresh, Download, ArrowUp, ArrowDown } from '@element-plus/icons-vue'
-import * as echarts from 'echarts'
-import BalanceTrendChart from '@/components/charts/BalanceTrendChart.vue'
-import {
-  getBalanceSummary,
-  getBalanceList,
-  getBalanceTrend,
-  getTransactionList,
-  exportTransactions
-} from '@/api/balance'
+import { Search, Refresh, Download, Tickets, Upload, Clock } from '@element-plus/icons-vue'
 
-// ─── Summary ────────────────────────────────────────────────────────────────
+const router = useRouter()
 
-const summaryLoading = ref(false)
-const summary = reactive({
-  total: 0, totalTrend: 0,
-  available: 0, availableTrend: 0,
-  frozen: 0, frozenTrend: 0,
-  todayIncome: 0, todayIncomeTrend: 0
+// ─── State ────────────────────────────────────────────────────────────────────
+
+const totalLoading = ref(false)
+const listLoading  = ref(false)
+
+const estimatedTotal = ref('0.000000')
+const totalAvailable = ref('0.000000')
+const totalFrozen    = ref('0.000000')
+const totalPending   = ref('0.000000')
+const totalCurrency  = ref('USDT')
+const refreshTime    = ref('')
+
+const searchKeyword = ref('')
+const hideZero      = ref(false)
+
+const currencyList = ['USDT', 'USD', 'EUR', 'BTC', 'ETH']
+
+const balances = ref([])
+
+// ─── Computed ─────────────────────────────────────────────────────────────────
+
+const filteredBalances = computed(() => {
+  let list = balances.value
+  if (hideZero.value) list = list.filter(b => b.total > 0)
+  if (searchKeyword.value) {
+    const kw = searchKeyword.value.toLowerCase()
+    list = list.filter(b =>
+      b.currency.toLowerCase().includes(kw) ||
+      b.fullName.toLowerCase().includes(kw)
+    )
+  }
+  return list
 })
 
-const summaryCards = [
-  { key: 'total', trendKey: 'totalTrend', label: 'Total Balance', icon: 'Wallet', theme: 'blue' },
-  { key: 'available', trendKey: 'availableTrend', label: 'Available Balance', icon: 'Money', theme: 'green' },
-  { key: 'frozen', trendKey: 'frozenTrend', label: 'Frozen Balance', icon: 'Lock', theme: 'orange' },
-  { key: 'todayIncome', trendKey: 'todayIncomeTrend', label: "Today's Income", icon: 'TrendCharts', theme: 'purple' }
-]
+// ─── Data loading ─────────────────────────────────────────────────────────────
 
 async function loadSummary() {
-  summaryLoading.value = true
+  totalLoading.value = true
   try {
-    // Mock data – replace with: const { data } = await getBalanceSummary()
+    // TODO: replace with real API → getBalanceSummary({ currency: totalCurrency.value })
     await sleep(400)
-    Object.assign(summary, {
-      total: 2584732.46,    totalTrend: 3.21,
-      available: 1923415.80, availableTrend: 1.87,
-      frozen: 661316.66,   frozenTrend: -0.54,
-      todayIncome: 18472.30, todayIncomeTrend: 12.4
-    })
-  } catch {
-    ElMessage.error('Failed to load balance summary')
+    estimatedTotal.value = '0.000000'
+    totalAvailable.value = '0.000000'
+    totalFrozen.value    = '0.000000'
+    totalPending.value   = '0.000000'
+    refreshTime.value    = formatNow()
   } finally {
-    summaryLoading.value = false
+    totalLoading.value = false
   }
 }
 
-// ─── Trend Chart ─────────────────────────────────────────────────────────────
-
-const trendRange = ref('30d')
-const trendData = ref({})
-
-async function loadTrend() {
+async function loadBalances() {
+  listLoading.value = true
   try {
-    // const { data } = await getBalanceTrend({ range: trendRange.value })
-    await sleep(300)
-    const days = trendRange.value === '7d' ? 7 : trendRange.value === '30d' ? 30 : 90
-    const dates = Array.from({ length: days }, (_, i) => {
-      const d = new Date()
-      d.setDate(d.getDate() - (days - i - 1))
-      return `${d.getMonth() + 1}/${d.getDate()}`
-    })
-    const base = 2200000
-    trendData.value = {
-      dates,
-      total: dates.map((_, i) => +(base + Math.sin(i / 5) * 120000 + i * 5000 + Math.random() * 40000).toFixed(0)),
-      available: dates.map((_, i) => +(base * 0.74 + Math.sin(i / 4) * 80000 + i * 3800 + Math.random() * 25000).toFixed(0)),
-      frozen: dates.map((_, i) => +(base * 0.26 + Math.cos(i / 6) * 30000 + Math.random() * 15000).toFixed(0))
-    }
-  } catch {
-    ElMessage.error('Failed to load trend data')
-  }
-}
-
-// ─── Pie Chart ───────────────────────────────────────────────────────────────
-
-const pieChartRef = ref(null)
-let pieChart = null
-
-const pieData = [
-  { name: 'USDT', value: 1120000, color: '#26a17b' },
-  { name: 'BTC',  value: 680000,  color: '#f7931a' },
-  { name: 'ETH',  value: 430000,  color: '#627eea' },
-  { name: 'USDC', value: 220000,  color: '#2775ca' },
-  { name: 'Others', value: 134732, color: '#a0a0b0' }
-]
-
-function initPieChart() {
-  if (!pieChartRef.value) return
-  pieChart = echarts.init(pieChartRef.value)
-  pieChart.setOption({
-    tooltip: {
-      trigger: 'item',
-      formatter: p => `<b>${p.name}</b><br/>$${Number(p.value).toLocaleString()} (${p.percent}%)`
-    },
-    legend: {
-      orient: 'vertical',
-      right: 8,
-      top: 'middle',
-      itemWidth: 10,
-      itemHeight: 10,
-      textStyle: { fontSize: 12 }
-    },
-    series: [{
-      type: 'pie',
-      radius: ['42%', '68%'],
-      center: ['38%', '50%'],
-      avoidLabelOverlap: false,
-      label: { show: false },
-      emphasis: {
-        label: { show: true, fontSize: 13, fontWeight: 'bold' },
-        scaleSize: 6
-      },
-      data: pieData.map(d => ({
-        name: d.name, value: d.value,
-        itemStyle: { color: d.color }
-      }))
-    }]
-  })
-}
-
-function resizePie() { pieChart && pieChart.resize() }
-
-// ─── Balance List ─────────────────────────────────────────────────────────────
-
-const balanceLoading = ref(false)
-const balanceList = ref([])
-
-async function loadBalanceList() {
-  balanceLoading.value = true
-  try {
-    // const { data } = await getBalanceList()
+    // TODO: replace with real API → getBalanceList()
     await sleep(500)
-    balanceList.value = [
-      { currency: 'USDT', fullName: 'Tether USD',    icon: 'https://cryptologos.cc/logos/tether-usdt-logo.png', available: 984521.34, frozen: 135478.66, usdValue: 1120000, change24h: 0.01 },
-      { currency: 'BTC',  fullName: 'Bitcoin',        icon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',  available: 8.42180,   frozen: 1.83200,   usdValue: 680000,  change24h: 2.34 },
-      { currency: 'ETH',  fullName: 'Ethereum',       icon: 'https://cryptologos.cc/logos/ethereum-eth-logo.png', available: 124.5560,  frozen: 12.4400,   usdValue: 430000,  change24h: -1.12 },
-      { currency: 'USDC', fullName: 'USD Coin',       icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',available: 210430.00, frozen: 9570.00,   usdValue: 220000,  change24h: 0.02 },
-      { currency: 'BNB',  fullName: 'BNB',            icon: 'https://cryptologos.cc/logos/bnb-bnb-logo.png',      available: 142.2300,  frozen: 20.0000,   usdValue: 68500,   change24h: 0.87 },
-      { currency: 'TRX',  fullName: 'TRON',           icon: 'https://cryptologos.cc/logos/tron-trx-logo.png',     available: 152340.00, frozen: 8760.00,   usdValue: 24100,   change24h: -0.45 }
+    balances.value = [
+      {
+        currency: 'USD', fullName: 'US Dollar',
+        icon: 'https://flagcdn.com/w40/us.png',
+        total: 0, available: 0, frozen: 0, pending: 0, usdValue: 0,
+        network: null
+      },
+      {
+        currency: 'USDC', fullName: 'USD Coin',
+        icon: 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png',
+        total: 0, available: 0, frozen: 0, pending: 0, usdValue: 0,
+        network: 'ERC-20'
+      },
+      {
+        currency: 'USDT', fullName: 'Tether USD',
+        icon: 'https://cryptologos.cc/logos/tether-usdt-logo.png',
+        total: 0, available: 0, frozen: 0, pending: 0, usdValue: 0,
+        network: 'TRC-20'
+      },
+      {
+        currency: 'BTC', fullName: 'Bitcoin',
+        icon: 'https://cryptologos.cc/logos/bitcoin-btc-logo.png',
+        total: 0, available: 0, frozen: 0, pending: 0, usdValue: 0,
+        network: null
+      },
+      {
+        currency: 'ETH', fullName: 'Ethereum',
+        icon: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
+        total: 0, available: 0, frozen: 0, pending: 0, usdValue: 0,
+        network: 'ERC-20'
+      }
     ]
-  } catch {
-    ElMessage.error('Failed to load balance list')
   } finally {
-    balanceLoading.value = false
+    listLoading.value = false
   }
 }
 
-// ─── Transactions ─────────────────────────────────────────────────────────────
+async function loadAll() {
+  await Promise.all([loadSummary(), loadBalances()])
+}
 
-const txLoading = ref(false)
-const transactions = ref([])
-const txFilter = reactive({ currency: '', type: '', dateRange: [] })
-const txPagination = reactive({ page: 1, pageSize: 10, total: 0 })
+function onCurrencyChange() {
+  loadSummary()
+}
 
-const currencyOptions = computed(() =>
-  balanceList.value.map(b => ({ label: b.currency, value: b.currency }))
-)
+// ─── Actions ──────────────────────────────────────────────────────────────────
 
-const TX_TYPES = ['deposit', 'withdrawal', 'transfer', 'fee']
-const CURRENCIES = ['USDT', 'BTC', 'ETH', 'USDC', 'BNB', 'TRX']
-const STATUSES = ['completed', 'pending', 'failed']
+function handlePayout(item) {
+  router.push({ path: '/payment/payout', query: { currency: item.currency } })
+}
 
-async function loadTransactions() {
-  txLoading.value = true
-  try {
-    // const { data } = await getTransactionList({ ...txFilter, ...txPagination })
-    await sleep(400)
-    const total = 128
-    txPagination.total = total
-    transactions.value = Array.from({ length: txPagination.pageSize }, (_, i) => {
-      const type = TX_TYPES[Math.floor(Math.random() * TX_TYPES.length)]
-      const currency = CURRENCIES[Math.floor(Math.random() * CURRENCIES.length)]
-      const status = STATUSES[Math.floor(Math.random() * (STATUSES.length - 0.3))]
-      return {
-        time: formatTime(new Date(Date.now() - Math.random() * 86400000 * 7)),
-        type,
-        currency,
-        direction: type === 'deposit' ? 'in' : 'out',
-        amount: +(Math.random() * 10000 + 10).toFixed(6),
-        status
-      }
-    }).sort((a, b) => b.time.localeCompare(a.time))
-  } catch {
-    ElMessage.error('Failed to load transactions')
-  } finally {
-    txLoading.value = false
-  }
+function handleWithdraw(item) {
+  router.push({ path: '/payment/withdraw', query: { currency: item.currency } })
+}
+
+function handleHistory(item) {
+  router.push({ path: '/payment/transactions', query: { currency: item.currency } })
 }
 
 async function handleExport() {
-  try {
-    ElMessage.info('Generating export file...')
-    // const blob = await exportTransactions({ ...txFilter })
-    // downloadBlob(blob, 'transactions.csv')
-    await sleep(800)
-    ElMessage.success('Export started, file will download shortly')
-  } catch {
-    ElMessage.error('Export failed')
-  }
+  ElMessage.info('Preparing export...')
+  // TODO: call exportBalances()
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatAmount(val) {
-  if (val === undefined || val === null) return '0.00'
-  return Number(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+function formatCrypto(v) {
+  if (v === undefined || v === null) return '0.000000'
+  return Number(v).toFixed(6)
 }
 
-function formatCryptoAmount(val) {
-  if (val === undefined || val === null) return '0'
-  const n = Number(val)
-  return n >= 1000 ? n.toLocaleString('en-US', { maximumFractionDigits: 2 }) : n.toFixed(6).replace(/\.?0+$/, '')
+function formatUSD(v) {
+  if (!v) return '0.00'
+  return Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
-function formatTime(d) {
+function formatNow() {
+  const d = new Date()
   const pad = n => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-function txTypeTag(type) {
-  return { deposit: 'success', withdrawal: 'danger', transfer: 'primary', fee: 'warning' }[type] || 'info'
-}
-
-function statusTag(status) {
-  return { completed: 'success', pending: 'warning', failed: 'danger' }[status] || 'info'
+function onImgError(e, item) {
+  e.target.style.display = 'none'
+  // Fallback: show currency initials via parent's ::after handled by CSS class
+  e.target.parentElement.classList.add('icon-fallback')
+  e.target.parentElement.dataset.initials = item.currency.slice(0, 2)
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
 
-// ─── Lifecycle ────────────────────────────────────────────────────────────────
-
-onMounted(async () => {
-  await Promise.all([loadSummary(), loadTrend(), loadBalanceList(), loadTransactions()])
-  await nextTick()
-  initPieChart()
-  window.addEventListener('resize', resizePie)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', resizePie)
-  pieChart && pieChart.dispose()
-})
+onMounted(loadAll)
 </script>
 
 <style scoped>
+/* ── Page ──────────────────────────────────────────────────────────────────── */
 .balance-page {
-  padding: 16px;
-  background: #f5f7fa;
-  min-height: 100vh;
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-/* ── Summary Cards ─────────────────────────────────────────────────────────── */
-.summary-row { margin-bottom: 16px; }
+/* ── Total Banner ──────────────────────────────────────────────────────────── */
+.total-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .06);
+}
 
-.summary-card {
+.total-banner__label {
+  font-size: 13px;
+  color: #8492a6;
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.total-banner__amount {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,.06);
-  transition: box-shadow .2s, transform .2s;
-  cursor: default;
-}
-.summary-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,.10);
-  transform: translateY(-2px);
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-.summary-card__icon {
-  flex-shrink: 0;
-  width: 56px;
-  height: 56px;
+.total-banner__number {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2d3d;
+  letter-spacing: -.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.currency-select {
+  width: 96px;
+}
+
+.total-banner__sub {
+  font-size: 13px;
+  color: #909399;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.total-banner__sub b { color: #1f2d3d; }
+
+.refresh-btn {
+  border: none !important;
+  padding: 0 !important;
+  color: #c0c4cc !important;
+}
+.refresh-btn:hover { color: #409eff !important; }
+
+/* Stat pills */
+.total-banner__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: center;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  min-width: 220px;
+}
+.stat-pill--green  { background: #f0f9eb; }
+.stat-pill--orange { background: #fdf6ec; }
+.stat-pill--blue   { background: #ecf5ff; }
+
+.stat-pill__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #606266;
+}
+.stat-pill__value {
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.stat-pill--green  .stat-pill__value { color: #67c23a; }
+.stat-pill--orange .stat-pill__value { color: #e6a23c; }
+.stat-pill--blue   .stat-pill__value { color: #409eff; }
+
+/* ── Balances Section ──────────────────────────────────────────────────────── */
+.balances-section {
+  background: #fff;
   border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .06);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2d3d;
+  margin: 0;
+}
+
+.section-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search-input { width: 200px; }
+
+.hide-zero-check {
+  font-size: 13px;
+  color: #606266;
+}
+
+/* ── Balance Card ──────────────────────────────────────────────────────────── */
+.balance-card {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 18px 20px;
+  border-radius: 10px;
+  border: 1px solid #e8edf3;
+  margin-bottom: 10px;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+  background: #fafbfc;
+}
+
+.balance-card:hover {
+  border-color: #409eff;
+  box-shadow: 0 2px 12px rgba(64, 158, 255, .10);
+  background: #fff;
+}
+
+.balance-card--zero {
+  opacity: .72;
+}
+
+/* Main section */
+.balance-card__main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 200px;
+  flex: 0 0 220px;
+}
+
+.balance-card__icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #f0f4f8;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.summary-card--blue  .summary-card__icon { background: #ecf5ff; color: #409eff; }
-.summary-card--green .summary-card__icon { background: #f0f9eb; color: #67c23a; }
-.summary-card--orange .summary-card__icon { background: #fdf6ec; color: #e6a23c; }
-.summary-card--purple .summary-card__icon { background: #f3ecff; color: #9254de; }
-
-.summary-card__body { flex: 1; min-width: 0; }
-.summary-card__label {
-  font-size: 12px;
-  color: #909399;
-  display: block;
-  margin-bottom: 4px;
+.balance-card__icon-wrap.icon-fallback::after {
+  content: attr(data-initials);
+  font-size: 14px;
+  font-weight: 700;
+  color: #606266;
 }
-.summary-card__value {
-  font-size: 22px;
+
+.balance-card__icon {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.balance-card__primary {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.balance-card__amount {
+  font-size: 17px;
   font-weight: 700;
   color: #1f2d3d;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
 }
-.summary-card__currency {
-  font-size: 14px;
+
+.balance-card__currency {
+  font-size: 13px;
   font-weight: 600;
-  color: #606266;
-  margin-right: 2px;
+  color: #5a6a7e;
 }
-.summary-card__trend {
+
+.network-tag {
+  font-size: 10px !important;
+  padding: 0 5px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  border-radius: 3px !important;
+  color: #909399 !important;
+  border-color: #dcdfe6 !important;
+}
+
+.balance-card__usd {
+  font-size: 12px;
+  color: #909399;
+  margin-top: 2px;
+}
+
+/* Breakdown */
+.balance-card__breakdown {
   display: flex;
   align-items: center;
-  gap: 2px;
-  margin-top: 4px;
-  font-size: 12px;
+  gap: 0;
+  flex: 1;
+  justify-content: center;
 }
-.trend-up  { color: #67c23a; }
-.trend-down { color: #f56c6c; }
 
-.skeleton-text {
-  display: inline-block;
-  width: 100px;
-  height: 22px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.2s infinite;
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 0 24px;
 }
+
+.breakdown-divider {
+  width: 1px;
+  height: 32px;
+  background: #e8edf3;
+}
+
+.breakdown-label {
+  font-size: 11px;
+  color: #909399;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  font-weight: 500;
+}
+
+.breakdown-value {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.breakdown-value--available { color: #67c23a; }
+.breakdown-value--frozen    { color: #e6a23c; }
+.breakdown-value--pending   { color: #409eff; }
+
+/* Actions */
+.balance-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Skeleton ──────────────────────────────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, #f0f2f5 25%, #e8ebef 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s infinite;
+  border-radius: 6px;
+}
+
 @keyframes shimmer {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
-/* ── Chart Row ────────────────────────────────────────────────────────────── */
-.chart-row, .table-row { margin-bottom: 16px; }
+.total-skeleton { display: inline-block; width: 180px; height: 40px; }
 
-.chart-card { height: 100%; }
-
-.card-header {
+.balance-card--skeleton {
+  pointer-events: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 14px;
+  background: #fafbfc;
 }
-.card-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1f2d3d;
-}
+.sk-icon  { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
+.sk-lines { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.sk-line  { height: 14px; }
+.sk-line--wide   { width: 40%; }
+.sk-line--narrow { width: 20%; }
 
-/* ── Tables ───────────────────────────────────────────────────────────────── */
-.currency-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.currency-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-.currency-name { font-size: 13px; font-weight: 600; color: #1f2d3d; }
-.currency-fullname { font-size: 11px; color: #909399; }
+/* ── Empty state ───────────────────────────────────────────────────────────── */
+.empty-state { padding: 40px 0; }
 
-.amount-text { font-size: 12px; color: #303133; font-variant-numeric: tabular-nums; }
-.amount-text.frozen { color: #e6a23c; }
-.amount-usd { font-size: 12px; font-weight: 600; color: #303133; }
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .balance-page { padding: 12px; }
+  .total-banner { flex-direction: column; }
+  .total-banner__stats { flex-direction: row; flex-wrap: wrap; }
+  .stat-pill { min-width: 140px; flex: 1; }
 
-.change-up   { color: #67c23a; font-size: 12px; font-weight: 600; }
-.change-down { color: #f56c6c; font-size: 12px; font-weight: 600; }
-
-.currency-badge {
-  display: inline-block;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: #f0f4f8;
-  font-size: 11px;
-  font-weight: 600;
-  color: #5a6a7e;
+  .balance-card {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .balance-card__main     { flex: 0 0 100%; }
+  .balance-card__breakdown { justify-content: flex-start; }
+  .breakdown-item          { padding: 0 16px; }
+  .breakdown-item:first-child { padding-left: 0; }
 }
 
-.time-text { font-size: 12px; color: #606266; }
-
-.amount-in  { color: #67c23a; font-size: 12px; font-weight: 600; }
-.amount-out { color: #f56c6c; font-size: 12px; font-weight: 600; }
-
-/* ── Filter + Pagination ─────────────────────────────────────────────────── */
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.pagination-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
-}
-
-/* ── Element Plus overrides ──────────────────────────────────────────────── */
-:deep(.el-card__body) { padding: 16px; }
-:deep(.el-card__header) { padding: 12px 16px; border-bottom: 1px solid #f0f4f8; }
-:deep(.el-table) { font-size: 12px; }
-:deep(.el-table__header) th { background: #fafbfc !important; color: #606266; }
-
-/* ── Responsive ──────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .balance-page { padding: 10px; }
-  .summary-card { padding: 14px; }
-  .summary-card__value { font-size: 18px; }
-  .filter-bar .el-date-picker { width: 100% !important; }
+@media (max-width: 600px) {
+  .balance-card__breakdown { flex-wrap: wrap; gap: 10px; }
+  .breakdown-divider { display: none; }
+  .breakdown-item { padding: 0; align-items: flex-start; }
+  .balance-card__actions { flex-wrap: wrap; }
+  .search-input { width: 100%; }
 }
 </style>
