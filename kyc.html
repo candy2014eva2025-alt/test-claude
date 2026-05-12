@@ -1,0 +1,702 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary);font-size:13px}
+.nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 20px;height:46px;display:flex;align-items:center;justify-content:space-between}
+.logo-box{width:24px;height:24px;background:#0B9DAF;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700}
+.nav-logo{display:flex;align-items:center;gap:6px;font-weight:500;font-size:13px;color:var(--color-text-primary)}
+.nav-r{font-size:12px;color:var(--color-text-secondary);display:flex;gap:12px}
+.layout{display:flex}
+.sidebar{width:144px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:14px 0;flex-shrink:0}
+.si{padding:6px 16px;font-size:12px;color:var(--color-text-secondary)}
+.si.act{color:#0B9DAF;background:rgba(11,157,175,0.07)}
+.sig{padding:5px 16px 2px;font-size:11px;color:var(--color-text-tertiary)}
+.main{flex:1;padding:18px;min-width:0}
+.pg{display:none}.pg.show{display:block}
+.ptitle{font-size:15px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.uncert{background:#FEF3C7;color:#92400E;font-size:11px;padding:2px 6px;border-radius:4px}
+.notice{background:#FFFBEB;border:0.5px solid #FCD34D;border-radius:8px;padding:8px 12px;font-size:12px;color:#78350F;margin-bottom:14px}
+.clist{display:flex;flex-direction:column;gap:12px}
+.ccard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px 16px}
+.ccard-title{font-size:12px;font-weight:500;color:var(--color-text-primary);padding-bottom:8px;margin-bottom:10px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.kyc-box{background:var(--color-background-secondary);border-radius:7px;padding:10px 12px}
+.ksec{margin-bottom:6px}
+.kh{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.kdot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ki{font-size:11px;color:var(--color-text-secondary);padding:1px 0 1px 14px;line-height:1.5;position:relative}
+.ki::before{content:"·";position:absolute;left:4px;color:var(--color-text-tertiary)}
+.ki.sub{padding-left:22px;color:var(--color-text-tertiary)}
+.ki.sub::before{left:12px}
+.kdivhr{height:0.5px;background:var(--color-border-tertiary);margin:6px 0}
+.step-bar{display:flex;align-items:center;margin-bottom:18px}
+.stp{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:68px}
+.stp-c{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500}
+.stp-c.on{background:#0B9DAF;color:#fff}
+.stp-c.done{background:#5DCAA5;color:#fff}
+.stp-c.off{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);color:var(--color-text-tertiary)}
+.stp-l{font-size:11px;color:var(--color-text-secondary);text-align:center;white-space:nowrap}
+.sline{flex:1;height:0.5px;background:var(--color-border-tertiary);margin-bottom:12px}
+.sline.on{background:#0B9DAF}
+.fsec{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.fsec-t{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.fsec-icon{width:15px;height:15px;background:var(--color-background-secondary);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.csr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.csr label{font-size:12px;color:var(--color-text-secondary);font-weight:500;white-space:nowrap}
+.csr select{height:32px;border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:0 9px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);min-width:200px}
+.kyc-info{background:var(--color-background-secondary);border-radius:7px;padding:10px 12px;margin-bottom:12px}
+.ugrid{display:grid;gap:10px}
+.ugrid.c2{grid-template-columns:1fr 1fr}
+.ugrid.c3{grid-template-columns:1fr 1fr 1fr}
+.ulabel{font-size:11px;color:var(--color-text-secondary);margin-bottom:5px;font-weight:500}
+.uopt{font-size:10px;color:var(--color-text-tertiary);margin-left:2px;font-weight:400}
+.ureq{color:#D85A30;margin-left:2px}
+.ubox{border:1px dashed var(--color-border-secondary);border-radius:7px;padding:14px 10px;text-align:center;cursor:pointer;background:var(--color-background-primary)}
+.ubox:hover{border-color:#0B9DAF}
+.uico{width:24px;height:24px;background:var(--color-background-secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
+.uhint{font-size:11px;color:var(--color-text-secondary);line-height:1.5}
+.uhint a{color:#0B9DAF;cursor:pointer}
+.uhint small{font-size:10px;color:var(--color-text-tertiary)}
+.tip{background:#E9FAF4;border:0.5px solid #9FE1CB;border-radius:6px;padding:7px 9px;font-size:11px;color:#085041;line-height:1.6;margin-top:6px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.frow.s1{grid-template-columns:1fr}
+.frow.s3{grid-template-columns:1fr 1fr 1fr}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fg label{font-size:11px;color:var(--color-text-secondary)}
+.fg label span{color:#D85A30}
+.fg input,.fg select{height:32px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:0 9px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);width:100%}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:24px}
+.fg select:disabled,.fg input:disabled{color:var(--color-text-tertiary);background:var(--color-background-secondary)}
+.person-card{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:12px 14px;margin-bottom:8px}
+.person-head{display:flex;align-items:center;margin-bottom:10px;font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.tri{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #0B9DAF;margin-right:5px}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:7px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;width:100%;margin-top:4px}
+.plus{color:#0B9DAF;font-size:14px;line-height:1}
+.bnav{display:flex;justify-content:flex-end;gap:7px;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
+.btn-s{background:var(--color-background-primary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:var(--font-sans)}
+.btn-p{background:#0B9DAF;color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:var(--font-sans)}
+.sub-hd{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin:10px 0 7px;padding-top:10px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:5px}
+.sdot{width:8px;height:8px;border-radius:2px;background:#0B9DAF;flex-shrink:0}
+.addr-box{background:var(--color-background-secondary);border-radius:7px;padding:10px 12px;margin-top:8px}
+.addr-head{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.addr-link{color:#0B9DAF;font-size:11px;cursor:pointer;margin-left:4px;font-weight:400}
+.radio-row{display:flex;gap:14px;margin-top:4px}
+.radio-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary);cursor:pointer}
+.rc{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0}
+.rc.on{border-color:#0B9DAF;background:#0B9DAF;display:flex;align-items:center;justify-content:center}
+.rc.on::after{content:'';width:4px;height:4px;border-radius:50%;background:#fff}
+.pu-row{display:flex;gap:10px;margin-bottom:4px}
+.pu-half{flex:1}
+.or-group{border:0.5px solid var(--color-border-tertiary);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.or-header{background:var(--color-background-secondary);padding:8px 12px;font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.or-badge{background:#E6F7F9;color:#0B9DAF;font-size:10px;padding:1px 8px;border-radius:10px;font-weight:500}
+.or-cols{display:grid;grid-template-columns:1fr auto 1fr}
+.or-side{padding:12px;cursor:pointer;transition:background 0.12s}
+.or-side:hover{background:var(--color-background-secondary)}
+.or-side.sel{background:#E6F7F9}
+.or-side.unsel{opacity:0.48}
+.or-side-top{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.or-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.or-dot.on{border-color:#0B9DAF;background:#0B9DAF}
+.or-dot.on::after{content:'';width:4px;height:4px;border-radius:50%;background:#fff;display:block}
+.or-name{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.or-desc{font-size:10px;color:var(--color-text-tertiary);line-height:1.55;margin-bottom:8px;padding-left:21px}
+.or-upload{border:1px dashed var(--color-border-secondary);border-radius:6px;padding:10px;text-align:center;background:var(--color-background-primary)}
+.sel .or-upload{border-color:#0B9DAF}
+.or-upload-txt{font-size:11px;color:#0B9DAF;margin-top:3px}
+.or-upload-sub{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.or-divider{display:flex;align-items:center;justify-content:center;width:32px;font-size:10px;font-weight:500;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-left:0.5px solid var(--color-border-tertiary);border-right:0.5px solid var(--color-border-tertiary)}
+.ein-group{border:0.5px solid var(--color-border-tertiary);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.ein-header{background:var(--color-background-secondary);padding:8px 12px;font-size:11px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ein-opts{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ein-opt{padding:10px 12px;cursor:pointer;transition:background 0.12s;border-right:0.5px solid var(--color-border-tertiary)}
+.ein-opt:last-child{border-right:none}
+.ein-opt:hover{background:var(--color-background-secondary)}
+.ein-opt.sel{background:#E6F7F9}
+.ein-opt.unsel{opacity:0.5}
+.ein-opt-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.ein-opt-name{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+.ein-opt-desc{font-size:10px;color:var(--color-text-tertiary);line-height:1.5;padding-left:21px}
+.ein-input{padding:10px 12px}
+.lang-btn{cursor:pointer;padding:2px 10px;border-radius:4px;font-size:12px;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-family:var(--font-sans);transition:all 0.15s}
+.lang-btn:hover{border-color:#0B9DAF;color:#0B9DAF}
+.auth-pledge-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.phone-input-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.phone-prefix{width:80px;flex-shrink:0;height:32px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:0 9px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+.face-tip{background:var(--color-background-secondary);border-radius:8px;padding:16px;text-align:center;font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-top:6px}
+.face-btn{display:inline-flex;align-items:center;gap:6px;background:#0B9DAF;color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:12px;cursor:pointer;font-family:var(--font-sans);margin-top:10px}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden">AssisTrade企业认证KYC</h2>
+<div>
+<div class="nav">
+  <div class="nav-logo"><div class="logo-box">AT</div>AssisTrade</div>
+  <div class="nav-r"><button class="lang-btn" id="lang-btn" onclick="toggleLang()">English</button><span>&#9825;</span><span>?</span></div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="si">首页</div><div style="height:4px"></div>
+  <div class="sig">&#8964; 个人中心</div>
+  <div class="si">账号与安全</div><div class="si act">企业认证</div>
+  <div class="si">团队管理</div><div class="si">我的费率</div><div class="si">我的权益</div>
+</div>
+<div class="main">
+
+<div class="pg show" id="pg1">
+  <div class="ptitle">企业认证 <span class="uncert">未认证</span>
+    <button class="btn-p" style="margin-left:auto" onclick="goPg2()">企业认证</button></div>
+  <div class="notice">请完成企业认证，我们将会在1~3个工作日内通知审核结果。完成后即可享受一站式外贸企业跨境金融和风控服务。</div>
+  <div class="clist" id="clist"></div>
+</div>
+
+<div class="pg" id="pg2">
+  <div class="ptitle" style="margin-bottom:16px">企业认证</div>
+  <div class="step-bar">
+    <div class="stp"><div class="stp-c on">&#9964;</div><div class="stp-l">企业信息</div></div>
+    <div class="sline on"></div>
+    <div class="stp"><div class="stp-c off">&#9965;</div><div class="stp-l">法人/股东信息</div></div>
+    <div class="sline"></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">授权认证</div></div>
+    <div class="sline"></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">完成</div></div>
+  </div>
+  <div class="fsec">
+    <div class="csr"><label>企业注册地</label>
+      <select id="csel" onchange="renderP2()">
+        <option value="cn">中国大陆</option><option value="hk">中国香港</option>
+        <option value="uk">英国</option><option value="sg">新加坡</option>
+        <option value="us">美国</option><option value="ca">加拿大</option>
+        <option value="ae">阿联酋</option>
+      </select>
+    </div>
+    <div id="p2-kyc"></div>
+  </div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg></div>企业证件</div><div id="p2-certs"></div></div>
+  <div class="fsec" id="fsec-biz" style="display:none"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8h6M8 5v6"/></svg></div>业务与交易背景材料</div><div id="p2-biz"></div></div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div>企业基本信息</div><div id="p2-basic"></div></div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div>企业经营信息</div>
+    <div class="frow"><div class="fg"><label>主营行业（可多选）</label><select><option>请选择</option></select></div><div class="fg"><label>主要资金往来地区和国家（可多选）</label><select><option>请选择</option></select></div></div>
+    <div class="frow"><div class="fg"><label>主营业务类型（可多选）</label><select><option>请选择</option></select></div><div class="fg"><label>企业网站（选填）</label><input placeholder="如需使用凭证，请输入企业网站网址"></div></div>
+    <div class="frow"><div class="fg"><label>年交易额（万美元）</label><input placeholder="万美元"></div><div class="fg"><label>产品或服务平均交付周期（选填）</label><input placeholder="天"></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <div class="fsec" style="margin-bottom:0"><div class="fsec-t">股权相关材料（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5">若控股股东为公司，请上传带签章的股权架构图、所有股东公司的注册文件和对应法人/董事的身份证件，以及最终受益人的身份证件</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a>点击上传股权相关材料</a> 或 拖拽到此处<br><small>PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
+    <div class="fsec" style="margin-bottom:0"><div class="fsec-t">其他附件（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5">您可以上传历史贸易材料，如：PI/CI/合同，物流单据等，帮助您快速通过审核</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a>点击上传其他附件</a> 或 拖拽到此处<br><small>PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
+  </div>
+  <div class="bnav"><button class="btn-s" onclick="goPg1()">返回</button><button class="btn-s">保存</button><button class="btn-p" onclick="goPg3()">下一步 &#8594;</button></div>
+</div>
+
+<div class="pg" id="pg3">
+  <div class="ptitle" style="margin-bottom:16px">企业认证</div>
+  <div class="step-bar">
+    <div class="stp"><div class="stp-c done">&#10003;</div><div class="stp-l">企业信息</div></div>
+    <div class="sline on"></div>
+    <div class="stp"><div class="stp-c on">&#9965;</div><div class="stp-l">法人/股东信息</div></div>
+    <div class="sline"></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">授权认证</div></div>
+    <div class="sline"></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">完成</div></div>
+  </div>
+  <div class="fsec"><div class="fsec-t">董事信息</div>
+    <div class="person-card">
+      <div class="person-head"><div class="tri"></div>董事 1</div>
+      <div class="frow" style="margin-bottom:8px"><div class="fg"><label>证件类型</label><select id="dir-type" onchange="renderDirUpload()"><option value="id2">二代居民身份证</option><option value="passport">护照</option><option value="hkid">香港永久居民身份证</option></select></div><div class="fg"></div></div>
+      <div id="dir-upload"></div>
+      <div class="sub-hd"><div class="sdot"></div>身份信息</div>
+      <div class="frow"><div class="fg"><label>董事姓名 <span>*</span></label><input placeholder="输入董事姓名"></div><div class="fg"><label>董事英文姓名 <span>*</span></label><input placeholder="输入董事英文姓名"></div></div>
+      <div class="frow"><div class="fg"><label>董事证件号码 <span>*</span></label><input placeholder="输入董事证件号码"></div><div class="fg"><label>董事国籍 <span>*</span></label><select><option>请选择</option></select></div></div>
+      <div class="frow"><div class="fg"><label>董事生日 <span>*</span></label><input type="date"></div><div class="fg"><label>董事证件有效期 <span>*</span></label><select><option>请选择</option><option>长期</option><option>有限期</option></select></div></div>
+      <div class="frow"><div class="fg"><label>证件起始日期</label><input type="date"></div><div class="fg"></div></div>
+      <div class="sub-hd"><div class="sdot"></div>居住地址</div>
+      <div id="dir-addr"></div>
+      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a>点击上传 地址证明文件</a> 或 拖拽到此处<br><small>PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
+      <div style="margin-top:10px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">是否为最终受益人 <span style="color:#D85A30">*</span></div><div class="radio-row"><div class="radio-item"><div class="rc"></div>是</div><div class="radio-item"><div class="rc on"></div>否</div></div></div>
+    </div>
+    <div class="add-btn"><span class="plus">+</span> 添加其他董事</div>
+  </div>
+  <div class="fsec"><div class="fsec-t">最终受益人信息</div>
+    <div class="person-card">
+      <div class="person-head"><div class="tri"></div>最终受益人 1</div>
+      <div class="frow" style="margin-bottom:8px"><div class="fg"><label>证件类型</label><select id="ubo-type" onchange="renderUboUpload()"><option value="id2">二代居民身份证</option><option value="passport">护照</option><option value="hkid">香港永久居民身份证</option><option value="other">其他证件</option></select></div><div class="fg"></div></div>
+      <div id="ubo-upload"></div>
+      <div class="sub-hd"><div class="sdot"></div>身份信息</div>
+      <div class="frow"><div class="fg"><label>受益人姓名 <span>*</span></label><input placeholder="输入受益人姓名"></div><div class="fg"><label>受益人英文姓名 <span>*</span></label><input placeholder="输入受益人英文姓名"></div></div>
+      <div class="frow"><div class="fg"><label>受益人证件号码 <span>*</span></label><input placeholder="输入受益人证件号码"></div><div class="fg"><label>受益人国籍 <span>*</span></label><select><option>请选择</option></select></div></div>
+      <div class="frow"><div class="fg"><label>受益人生日 <span>*</span></label><input type="date"></div><div class="fg"><label>受益人证件有效期 <span>*</span></label><select><option>请选择</option><option>长期</option><option>有限期</option></select></div></div>
+      <div class="frow"><div class="fg"><label>证件起始日期</label><input type="date"></div><div class="fg"><label>占股比例 <span>*</span></label><div style="display:flex;align-items:center;gap:6px"><input placeholder="输入占股比例" style="flex:1"><span style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap">%</span></div></div></div>
+      <div class="sub-hd"><div class="sdot"></div>居住地址</div>
+      <div id="ubo-addr"></div>
+      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a>点击上传 地址证明文件</a> 或 拖拽到此处<br><small>PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
+    </div>
+    <div class="add-btn"><span class="plus">+</span> 添加最终受益人</div>
+  </div>
+  <div class="bnav"><button class="btn-s" onclick="goPg2()">&#8593; 上一步</button><button class="btn-s">保存</button><button class="btn-p" onclick="goPg4()">下一步 &#8594;</button></div>
+</div>
+
+<div class="pg" id="pg4">
+  <div class="ptitle" style="margin-bottom:16px" data-i18n="pg_title">企业认证</div>
+  <div class="step-bar">
+    <div class="stp"><div class="stp-c done">&#10003;</div><div class="stp-l" data-i18n="step1">企业信息</div></div>
+    <div class="sline on"></div>
+    <div class="stp"><div class="stp-c done">&#10003;</div><div class="stp-l" data-i18n="step2">法人/股东信息</div></div>
+    <div class="sline on"></div>
+    <div class="stp"><div class="stp-c on">&#9964;</div><div class="stp-l" data-i18n="step3">授权认证</div></div>
+    <div class="sline"></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l" data-i18n="step4">完成</div></div>
+  </div>
+
+  <!-- 本次操作授权人 -->
+  <div class="fsec">
+    <div class="fsec-t" data-i18n="auth_person_title">本次操作授权人</div>
+    <div class="frow" style="margin-bottom:10px">
+      <div class="fg">
+        <label data-i18n="auth_role_label">授权人身份</label>
+        <select id="auth-role" onchange="renderAuthRole()">
+          <option value="director" data-i18n-opt="role_director">董事</option>
+          <option value="agent" data-i18n-opt="role_agent">授权代理人</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label data-i18n="auth_doc_label">证件类型</label>
+        <select id="auth-doc-type" onchange="renderAuthDocUpload()">
+          <option value="id2" data-i18n-opt="doc_id2">二代居民身份证</option>
+          <option value="hkid_old" data-i18n-opt="doc_hkid_old">香港居民身份证（2003旧版）</option>
+          <option value="hkid_new" data-i18n-opt="doc_hkid_new">香港居民身份证（2018新版）</option>
+          <option value="passport" data-i18n-opt="doc_passport">护照</option>
+          <option value="other" data-i18n-opt="doc_other">其他证件</option>
+        </select>
+      </div>
+    </div>
+    <div id="auth-doc-upload"></div>
+  </div>
+
+  <!-- 授权委托书（仅授权代理人时显示）-->
+  <div class="fsec" id="fsec-poa" style="display:none">
+    <div class="fsec-t">
+      <div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg></div>
+      <span data-i18n="poa_title">授权委托书</span>
+    </div>
+    <div id="poa-desc" style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">
+      请填写公司任一授权董事签署的授权委托书，加盖公司公章，上传授权委托书照片或者PDF文件
+      &nbsp;<a style="color:#0B9DAF;cursor:pointer" data-i18n="poa_download">&#128229; 下载授权委托书</a>
+    </div>
+    <div class="ubox" style="padding:14px;text-align:center">
+      <div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div>
+      <div class="uhint"><a data-i18n="poa_upload_link">点击上传 授权委托书</a> <span data-i18n="or_drag">或 拖拽到此处</span><br><small data-i18n="upload_hint_1">PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div>
+    </div>
+  </div>
+
+  <!-- 授权认证 -->
+  <div class="fsec">
+    <div class="fsec-t">
+      <div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><path d="M8 2l1.5 3H13l-2.8 2 1 3.2L8 8.5 5.8 10.2l1-3.2L4 5h3.5z"/></svg></div>
+      <span data-i18n="auth_cert_title">授权认证</span>
+    </div>
+    <div class="fg" style="margin-bottom:10px">
+      <label data-i18n="auth_method_label">认证方式</label>
+      <select id="auth-method" onchange="renderAuthMethod()">
+        <option value="phone" data-i18n-opt="method_phone">手机号认证</option>
+        <option value="pledge" data-i18n-opt="method_pledge">承诺函认证（需上传加盖公司公章的承诺函及手持承诺函照片）</option>
+        <option value="face" data-i18n-opt="method_face">人脸识别认证</option>
+      </select>
+    </div>
+    <div id="auth-method-content"></div>
+  </div>
+
+  <div class="bnav">
+    <button class="btn-s" onclick="goPg3()"><span data-i18n="btn_prev">&#8593; 上一步</span></button>
+    <button class="btn-s"><span data-i18n="btn_save">保存</span></button>
+    <button class="btn-p"><span data-i18n="btn_submit">提交认证 &#10003;</span></button>
+  </div>
+</div>
+
+</div></div></div>
+
+<script>
+var T='#0B9DAF',G='#1D9E75',A='#BA7517',GR='#888780';
+var GC={
+  uk:{'英格兰':['伦敦','曼彻斯特','伯明翰','利兹','利物浦'],'苏格兰':['爱丁堡','格拉斯哥','阿伯丁'],'威尔士':['卡迪夫','斯旺西'],'北爱尔兰':['贝尔法斯特','德里']},
+  sg:{'中区':['滨海湾','牛车水','克拉码头','乌节'],'东区':['淡滨尼','勿洛','樟宜'],'北区':['兀兰','义顺','三巴旺'],'西区':['裕廊','蔡厝港','先驱'],'东北区':['盛港','榜鹅','后港']},
+  us:{'加利福尼亚州':['洛杉矶','旧金山','圣地亚哥','圣何塞'],'纽约州':['纽约市','水牛城','罗切斯特'],'德克萨斯州':['休斯顿','达拉斯','奥斯汀'],'佛罗里达州':['迈阿密','奥兰多','坦帕'],'华盛顿州':['西雅图','斯波坎'],'伊利诺伊州':['芝加哥','奥罗拉'],'马萨诸塞州':['波士顿','剑桥'],'特拉华州':['威尔明顿','多佛'],'内华达州':['拉斯维加斯','里诺'],'华盛顿特区':['华盛顿特区']},
+  ca:{'安大略省':['多伦多','渥太华','密西沙加'],'魁北克省':['蒙特利尔','魁北克市'],'不列颠哥伦比亚省':['温哥华','素里','本拿比'],'艾伯塔省':['卡尔加里','埃德蒙顿'],'马尼托巴省':['温尼伯'],'萨斯喀彻温省':['里贾纳','萨斯卡通'],'新斯科舍省':['哈利法克斯'],'新不伦瑞克省':['弗雷德里克顿','圣约翰']},
+  ae:{'迪拜':['迪拜市中心','朱美拉','迪拜码头','商业湾','DIFC','棕榈岛','硅绿洲','国际城'],'阿布扎比':['阿布扎比市','Yas岛','萨迪亚特岛'],'沙迦':['沙迦市'],'阿治曼':['阿治曼市'],'富查伊拉':['富查伊拉市'],'乌姆盖万':['乌姆盖万市'],'哈伊马角':['哈伊马角市']}
+};
+var GW={
+  '中国':{'广东省':['广州','深圳','东莞','佛山'],'北京市':['东城区','西城区','朝阳区','海淀区'],'上海市':['浦东新区','黄浦区','徐汇区','静安区'],'浙江省':['杭州','宁波','温州']},
+  '中国香港':{'香港':['中西区','湾仔','东区','南区','九龙城','油尖旺','沙田']},
+  '英国':{'英格兰':['伦敦','曼彻斯特','伯明翰'],'苏格兰':['爱丁堡','格拉斯哥'],'威尔士':['卡迪夫'],'北爱尔兰':['贝尔法斯特']},
+  '新加坡':{'新加坡':['中区','东区','北区','西区','东北区']},
+  '美国':{'加利福尼亚州':['洛杉矶','旧金山'],'纽约州':['纽约市','水牛城'],'德克萨斯州':['休斯顿','达拉斯'],'佛罗里达州':['迈阿密','奥兰多']},
+  '加拿大':{'安大略省':['多伦多','渥太华'],'不列颠哥伦比亚省':['温哥华','素里'],'魁北克省':['蒙特利尔']},
+  '阿联酋':{'迪拜':['迪拜市中心','朱美拉','DIFC'],'阿布扎比':['阿布扎比市']},
+  '澳大利亚':{'新南威尔士州':['悉尼','纽卡斯尔'],'维多利亚州':['墨尔本'],'昆士兰州':['布里斯班','黄金海岸']},
+  '日本':{'东京都':['新宿区','涩谷区','品川区'],'大阪府':['大阪市']},
+  '其他':{'其他省/州':['其他城市']}
+};
+
+function addrL2(p,dk){var d=dk==='w'?GW:GC[dk];var cS=document.getElementById(p+'-c');var rS=document.getElementById(p+'-r');var ctS=document.getElementById(p+'-city');var c=cS?cS.value:'';rS.innerHTML='<option value="">请选择</option>';ctS.innerHTML='<option value="">请先选择省/州</option>';ctS.disabled=true;rS.disabled=false;if(c&&d[c])Object.keys(d[c]).forEach(function(r){rS.innerHTML+='<option>'+r+'</option>';});}
+function addrL3(p,dk){var d=dk==='w'?GW:GC[dk];var cS=document.getElementById(p+'-c');var rS=document.getElementById(p+'-r');var ctS=document.getElementById(p+'-city');var c=cS?cS.value:'';var r=rS?rS.value:'';ctS.innerHTML='<option value="">请选择</option>';ctS.disabled=true;var cs=[];if(c&&d[c]&&d[c][r])cs=d[c][r];else Object.values(d).forEach(function(rs){if(rs[r])cs=rs[r];});if(cs.length){cs.forEach(function(ct){ctS.innerHTML+='<option>'+ct+'</option>';});ctS.disabled=false;}}
+function mkAF(p,cl,dk){var d=GC[dk];var ro=Object.keys(d).map(function(r){return '<option>'+r+'</option>';}).join('');return '<div class="frow s3" style="margin-bottom:8px"><div class="fg"><label>国家/地区 <span>*</span></label><select disabled><option>'+cl+'</option></select></div><div class="fg"><label>省/州 <span>*</span></label><select id="'+p+'-r" onchange="addrL3(\''+p+'\',\''+dk+'\')"><option value="">请选择</option>'+ro+'</select></div><div class="fg"><label>城市 <span>*</span></label><select id="'+p+'-city" disabled><option value="">请先选择省/州</option></select></div></div>';}
+function mkAW(p,dk){var d=dk==='w'?GW:GC[dk];var co=Object.keys(d).map(function(c){return '<option>'+c+'</option>';}).join('');return '<div class="frow s3" style="margin-bottom:8px"><div class="fg"><label>国家/地区 <span>*</span></label><select id="'+p+'-c" onchange="addrL2(\''+p+'\',\''+dk+'\')"><option value="">请选择</option>'+co+'</select></div><div class="fg"><label>省/州 <span>*</span></label><select id="'+p+'-r" onchange="addrL3(\''+p+'\',\''+dk+'\')" disabled><option value="">请先选择国家/地区</option></select></div><div class="fg"><label>城市 <span>*</span></label><select id="'+p+'-city" disabled><option value="">请先选择省/州</option></select></div></div>';}
+
+var UP='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg>';
+var PI='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>';
+
+function ubox(lbl,req,hint,tip){var isEn=typeof lang!=='undefined'&&lang==='en';var b=req?'<span class="ureq">*</span>':'<span class="uopt">'+(isEn?' (optional)':'（选填）')+'</span>';var ct=isEn?'Click to upload':'点击上传';var dr=isEn?'or drag & drop':'或 拖拽到此处';var dh=isEn?'PNG/JPG/PDF, max 10 MB':'PNG/JPG/PDF，不超过10MB，最多1个';return '<div><div class="ulabel">'+lbl+b+'</div><div class="ubox"><div class="uico">'+UP+'</div><div class="uhint"><a>'+ct+'</a> '+dr+'<br><small>'+(hint||dh)+'</small></div></div>'+(tip?'<div class="tip">'+tip+'</div>':'')+'</div>';}
+
+function mkOrGroup(id){
+  function side(sid,title,desc,active){var cls=active?'or-side sel':'or-side unsel';var dot=active?'or-dot on':'or-dot';return '<div class="'+cls+'" id="'+id+'-'+sid+'" onclick="swOr(\''+id+'\',\''+sid+'\')"><div class="or-side-top"><div class="'+dot+'" id="'+id+'-d-'+sid+'"></div><div class="or-name">'+title+'</div></div><div class="or-desc">'+desc+'</div><div class="or-upload"><div style="display:flex;align-items:center;justify-content:center;gap:5px">'+UP+'<span class="or-upload-txt">点击上传</span></div><div class="or-upload-sub">PNG/JPG/PDF，不超过10MB，最多3个</div></div></div>';}
+  return '<div class="or-group"><div class="or-header">'+UP+'&nbsp;域名证明 或 有效店铺地址证明<span class="ureq">*</span><span class="or-badge">二选一</span></div><div class="or-cols">'+side('l','域名证明','域名购买记录（含域名/公司名称）及域名注册证书；或网站/店铺推广证明（如广告后台截图）。',true)+'<div class="or-divider">OR</div>'+side('r','有效店铺地址证明','提供有效网店/平台店铺URL截图，需显示店铺名称、商品及经营状态，截图日期在近3个月内。',false)+'</div></div>';
+}
+function swOr(id,side){var lft=document.getElementById(id+'-l');var rgt=document.getElementById(id+'-r');var dl=document.getElementById(id+'-d-l');var dr=document.getElementById(id+'-d-r');if(side==='l'){lft.className='or-side sel';rgt.className='or-side unsel';dl.className='or-dot on';dr.className='or-dot';}else{rgt.className='or-side sel';lft.className='or-side unsel';dr.className='or-dot on';dl.className='or-dot';}}
+
+function mkEIN(id){
+  return '<div class="ein-group"><div class="ein-header">企业注册编号 或 雇主识别号(EIN)<span class="ureq">*</span><span style="background:#E6F7F9;color:#0B9DAF;font-size:10px;padding:1px 8px;border-radius:10px;font-weight:500;margin-left:4px">二选一</span></div>'
+    +'<div class="ein-opts">'
+    +'<div class="ein-opt sel" id="'+id+'-ci" onclick="swEIN(\''+id+'\',\'ci\')"><div class="ein-opt-row"><div class="or-dot on" id="'+id+'-dci"></div><div class="ein-opt-name">公司注册编号（CI）</div></div><div class="ein-opt-desc">已取得注册证书的公司，填写CI左上角编号</div></div>'
+    +'<div class="ein-opt unsel" id="'+id+'-ein" onclick="swEIN(\''+id+'\',\'ein\')"><div class="ein-opt-row"><div class="or-dot" id="'+id+'-dein"></div><div class="ein-opt-name">雇主识别号（EIN）</div></div><div class="ein-opt-desc">提供EIN验证信的企业，填写9位EIN号码</div></div>'
+    +'</div><div class="ein-input"><div class="fg"><label id="'+id+'-lbl">公司注册编号（CI）<span>*</span></label><input id="'+id+'-inp" placeholder="请输入CI左上角编号"></div></div></div>';
+}
+function swEIN(id,side){var ci=document.getElementById(id+'-ci');var ein=document.getElementById(id+'-ein');var dci=document.getElementById(id+'-dci');var dein=document.getElementById(id+'-dein');var lbl=document.getElementById(id+'-lbl');var inp=document.getElementById(id+'-inp');if(side==='ci'){ci.className='ein-opt sel';ein.className='ein-opt unsel';dci.className='or-dot on';dein.className='or-dot';lbl.innerHTML='公司注册编号（CI）<span>*</span>';inp.placeholder='请输入CI左上角编号';}else{ein.className='ein-opt sel';ci.className='ein-opt unsel';dein.className='or-dot on';dci.className='or-dot';lbl.innerHTML='雇主识别号（EIN）<span>*</span>';inp.placeholder='请输入9位EIN号码，如：12-3456789';}}
+
+var kyc={
+  cn:{name:'中国大陆企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['企业营业执照','法人证件照片（身份证 / 护照 / 香港永久居民身份证）','最终受益人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）']},{c:GR,t:'认证方式（三选一）',items:['手机号认证（仅限中国大陆二代身份证实名的手机号）','承诺函认证（需上传加盖公章的承诺函文件以及法人手持承诺函照片）','人脸识别认证']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
+  hk:{name:'中国香港企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['注册证书CI','商业登记证BR','所有董事证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','最终受益人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）']},{c:GR,t:'认证方式（三选一）',items:['手机号认证','承诺函认证（需上传加盖公章的承诺函文件以及董事手持承诺函照片）','人脸识别认证']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及董事手持承诺函照片']}]},
+  uk:{name:'英国企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
+  sg:{name:'新加坡企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','商业登记证','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
+  us:{name:'美国企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','良好存续证明','公司章程','雇主识别号(EIN)验证信','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
+  ca:{name:'加拿大企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
+  ae:{name:'阿联酋企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['营业执照（以及历史更名证书，如适用）','公司章程','股东登记名册','董事登记名册','商业登记证','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]}
+};
+
+var certUploads={
+  cn:[{l:'企业营业执照',r:true}],
+  hk:[{l:'注册证书CI',r:true},{l:'商业登记证BR',r:true}],
+  uk:[{l:'注册证书CI',r:true},{l:'历史更名证书（如适用）',r:false},{l:'公司章程',r:true}],
+  sg:[{l:'注册证书CI',r:true},{l:'注册证书CI的历史更名证书（如适用）',r:false},{l:'公司章程',r:true},{l:'商业登记证BR',r:true}],
+  us:[{l:'历史更名证书（如适用）',r:false},{l:'良好存续证明',r:true},{l:'公司章程',r:true},{l:'股权架构图（董事签字盖章）',r:true}],
+  ca:[{l:'注册证书CI',r:true},{l:'历史更名证书（如适用）',r:false},{l:'公司章程',r:true},{l:'股权架构图（董事签字盖章）',r:true}],
+  ae:[{l:'营业执照（如适用）',r:true},{l:'历史更名证书（如适用）',r:false},{l:'公司章程',r:true},{l:'股东登记名册',r:true},{l:'董事登记名册',r:true},{l:'股权架构图（董事签字盖章）',r:true}]
+};
+
+var bn={
+  uk:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非英国如内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（英国公司）关系的文件（如已签署的代运营协议）。',
+  sg:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非新加坡内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（新加坡公司）关系的文件。',
+  us:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非美国内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（美国公司）关系的文件。',
+  ca:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非加拿大内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（加拿大公司）关系的文件。',
+  ae:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非阿联酋内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（阿联酋公司）关系的文件。'
+};
+
+function bSecs(secs){var h=Math.ceil(secs.length/2);function fn(s){return '<div class="ksec"><div class="kh"><div class="kdot" style="background:'+s.c+'"></div>'+s.t+'</div>'+s.items.map(function(i){return '<div class="ki'+(i[0]==='①'||i[0]==='②'?' sub':'')+'">'+i+'</div>';}).join('')+'</div>';}return '<div class="two-col"><div class="kyc-box">'+secs.slice(0,h).map(fn).join('<div class="kdivhr"></div>')+'</div><div class="kyc-box">'+secs.slice(h).map(fn).join('<div class="kdivhr"></div>')+'</div></div>';}
+
+function basicF(k){
+  if(k==='cn')return '<div class="frow"><div class="fg"><label>统一社会信用代码 <span>*</span></label><input placeholder="18位统一社会信用代码"></div><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业名称 <span>*</span></label><input placeholder="请输入企业名称"></div></div><div class="frow"><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div></div><div class="frow"><div class="fg"><label>企业注册地址（省） <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>企业注册地址（市） <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业注册详细地址 <span>*</span></label><input placeholder="输入企业注册详细地址"></div></div>';
+  if(k==='hk')return '<div class="frow"><div class="fg"><label>企业注册编号（CI） <span>*</span></label><input placeholder="CI左上角编号"></div><div class="fg"><label>企业商业登记号码 <span>*</span></label><input placeholder="16位商业登记号，如：66668888-000-00-00-A"></div></div><div class="frow"><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div></div><div class="frow"><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div><div class="fg"><label>企业中文名称 <span>*</span></label><input placeholder="输入企业中文名称"></div></div><div class="frow"><div class="fg"><label>企业注册地址（省） <span>*</span></label><select><option>香港特别行政区</option></select></div><div class="fg"><label>企业注册地址（市） <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业注册详细地址 <span>*</span></label><input placeholder="输入企业注册详细地址"></div></div><div class="frow"><div class="fg"><label>企业英文名称 <span>*</span></label><input placeholder="输入企业英文名称"></div><div class="fg"><label>企业英文地址 <span>*</span></label><input placeholder="输入企业英文地址"></div></div>';
+  // 注意：阿联酋 key 是 ae，地名统一用"阿联酋"
+  var cl={uk:'英国',sg:'新加坡',us:'美国',ca:'加拿大',ae:'阿联酋'}[k];
+  var reg=mkAF('reg-'+k,cl,k);
+  var biz=mkAW('biz-'+k,k);
+  var top='';
+  if(k==='us'){
+    top=mkEIN('ein')+'<div class="frow"><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div></div>';
+  } else {
+    top='<div class="frow"><div class="fg"><label>公司注册编号 <span>*</span></label><input placeholder="CI左上角编号"></div><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow"><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div><div class="fg"></div></div>';
+  }
+  return top
+    +'<div class="frow"><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div><div class="fg"><label>企业英文名称 <span>*</span></label><input placeholder="请输入企业英文名称"></div></div>'
+    +'<div style="margin-bottom:4px;font-size:11px;color:var(--color-text-secondary);font-weight:500">企业注册地址 <span style="color:#D85A30">*</span></div>'
+    +reg
+    +'<div class="frow s1" style="margin-bottom:10px"><div class="fg"><label>详细地址 <span>*</span></label><input placeholder="请输入企业注册详细地址"></div></div>'
+    +'<div class="addr-box"><div class="addr-head"><div class="sdot"></div>企业经营地址 <span style="font-size:11px;color:var(--color-text-tertiary);font-weight:400">若与注册地址一致</span><span class="addr-link">一键填入</span></div>'
+    +biz
+    +'<div class="fg" style="margin-top:8px"><label>详细地址 <span>*</span></label><input placeholder="输入企业经营详细地址"></div></div>';
+}
+
+function mkBiz(k){
+  var note=bn[k]||'';
+  return '<div class="ugrid c2"><div style="grid-column:1/-1">'+mkOrGroup('or-'+k)+'</div>'
+    +ubox('网站/平台近六个月历史交易记录（含退款、拒付记录）',true,'PNG/JPG/PDF，不超过10MB，最多5个附件','说明：若新商户无历史交易记录，可提交商户网站推广证明。')
+    +ubox('营业地址证明',true,'PNG/JPG/PDF，不超过10MB，最多3个附件',note+'<br>可接受文件：租赁合同或产权证明/近3个月水电/物业账单；或实地拍摄照片（含承租人姓名字条、拍摄人姓名、日期时间、详细地址）。')
+    +ubox('近6个月内的银行账户证明文件（逐个账户分别提供）',true,'PNG/JPG/PDF，不超过10MB，每账户最多3个附件','文件需显示公司主体名称、账号信息、带有银行LOGO或加盖银行章。')
+    +ubox('PCI合规安全证书',false,'PNG/JPG/PDF，不超过10MB，最多1个附件','如适用则提供。')
+    +'</div>';
+}
+
+function renderP2(){
+  var k=document.getElementById('csel').value;
+  document.getElementById('p2-kyc').innerHTML='<div class="kyc-info">'+bSecs(kyc[k].secs)+'</div>';
+  var ce=certUploads[k];
+  var cols=ce.length<=2?'c'+ce.length:ce.length<=4?'c2':'c3';
+  document.getElementById('p2-certs').innerHTML='<div class="ugrid '+cols+'">'+ce.map(function(u){return ubox(u.l,u.r,'PNG/JPG/PDF，不超过10MB，最多1个','');}).join('')+'</div>';
+  var bs=document.getElementById('fsec-biz');
+  if(['uk','sg','us','ca','ae'].includes(k)){bs.style.display='block';document.getElementById('p2-biz').innerHTML=mkBiz(k);}
+  else bs.style.display='none';
+  document.getElementById('p2-basic').innerHTML=basicF(k);
+  var ii=['cn','hk'].includes(k);
+  var dO=!ii?'<option value="p">护照</option><option value="l">本地身份证</option>':(k==='cn'?'<option value="i">二代居民身份证</option><option value="p">护照</option><option value="h">香港永久居民身份证</option>':'<option value="i">身份证</option><option value="p">护照</option><option value="h">香港永久居民身份证</option><option value="o">其他证件</option>');
+  document.getElementById('dir-type').innerHTML=dO;
+  document.getElementById('ubo-type').innerHTML=!ii?'<option value="p">护照</option><option value="l">本地身份证</option>':(k==='cn'?'<option value="i">二代居民身份证</option><option value="p">护照</option><option value="h">香港永久居民身份证</option><option value="o">其他证件</option>':'<option value="i">身份证</option><option value="p">护照</option><option value="h">香港永久居民身份证</option><option value="o">其他证件</option>');
+  renderDirUpload();renderUboUpload();
+}
+
+function pBox(lbl){var isEn=typeof lang!=='undefined'&&lang==='en';var ct=isEn?'Click to upload':'点击上传';var dr=isEn?'or drag & drop':'或 拖拽到此处';var dh=isEn?'PNG/JPG/JPEG/PDF, max 10 MB, 1 file':'PNG/JPG/JPEG/PDF，不超过10MB，最多1个';return '<div class="ubox" style="display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px"><div style="width:40px;height:48px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div><div class="uhint" style="text-align:left"><a>'+ct+' '+lbl+'</a> '+dr+'<br><small>'+dh+'</small></div></div>';}
+function pBox2(l1,l2){var isEn=typeof lang!=='undefined'&&lang==='en';var ct=isEn?'Click to upload':'点击上传';var dr=isEn?'or drag':'或 拖拽';var dh=isEn?'PNG/JPG/PDF, max 10 MB, 1 file':'PNG/JPG/PDF，不超过10MB，最多1个';function h(l){return '<div class="pu-half"><div class="ulabel">'+l+'<span class="ureq">*</span></div><div class="ubox" style="display:flex;align-items:center;gap:8px;padding:10px;text-align:left"><div style="width:36px;height:44px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div><div class="uhint" style="text-align:left"><a>'+ct+' '+l+'</a> '+dr+'<br><small>'+dh+'</small></div></div></div>';}return '<div class="pu-row">'+h(l1)+h(l2)+'</div>';}
+function renderDirUpload(){var v=document.getElementById('dir-type').value;var l=document.getElementById('dir-type').options[document.getElementById('dir-type').selectedIndex].text;document.getElementById('dir-upload').innerHTML=v==='i'?pBox2('身份证人像面','身份证国徽面'):pBox(l);document.getElementById('dir-addr').innerHTML=mkAW('da','w')+'<div class="frow s1" style="margin-top:8px;margin-bottom:0"><div class="fg"><label>详细住址 <span>*</span></label><input placeholder="输入董事详细住址"></div></div>';}
+function renderUboUpload(){var v=document.getElementById('ubo-type').value;var l=document.getElementById('ubo-type').options[document.getElementById('ubo-type').selectedIndex].text;document.getElementById('ubo-upload').innerHTML=v==='i'?pBox2('身份证人像面','身份证国徽面'):pBox(l);document.getElementById('ubo-addr').innerHTML=mkAW('ua','w')+'<div class="frow s1" style="margin-top:8px;margin-bottom:0"><div class="fg"><label>详细住址 <span>*</span></label><input placeholder="输入受益人详细住址"></div></div>';}
+function renderClist(){var ks=['cn','hk','uk','sg','us','ca','ae'];document.getElementById('clist').innerHTML=ks.map(function(k){return '<div class="ccard"><div class="ccard-title">'+kyc[k].name+'</div>'+bSecs(kyc[k].secs)+'</div>';}).join('');}
+function goPg1(){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('show');});document.getElementById('pg1').classList.add('show');}
+function goPg2(){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('show');});document.getElementById('pg2').classList.add('show');renderP2();}
+function goPg3(){document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('show');});document.getElementById('pg3').classList.add('show');}
+renderClist();renderDirUpload();renderUboUpload();
+
+// ── English KYC data ──────────────────────────────────────────
+var kyc_en={
+  cn:{name:'Mainland China — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['Business License','Legal Rep ID (National ID / Passport / HK Permanent Resident ID)','UBO ID (National ID / Passport / HK PR ID / Other)']},
+    {c:GR,t:'Authentication (choose one)',items:['Phone verification (mainland China real-name mobile only)','Pledge letter (company seal + legal rep holding pledge photo)','Face recognition']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (National ID / Passport / HK PR ID / Other)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+  ]},
+  hk:{name:'Hong Kong — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['Certificate of Incorporation (CI)','Business Registration Certificate (BR)','All director IDs (National ID / Passport / HK PR ID / Other)','UBO IDs (National ID / Passport / HK PR ID / Other)']},
+    {c:GR,t:'Authentication (choose one)',items:['Phone verification','Pledge letter (company seal + director holding pledge photo)','Face recognition']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (National ID / Passport / HK PR ID / Other)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
+  ]},
+  uk:{name:'United Kingdom — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Articles of Association','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
+    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+  ]},
+  sg:{name:'Singapore — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Articles of Association','Business Registration Certificate','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
+    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
+  ]},
+  us:{name:'United States — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['CI + name change cert (if applicable)','Certificate of Good Standing','Articles of Incorporation','EIN verification letter','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
+    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+  ]},
+  ca:{name:'Canada — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['CI + name change cert (if applicable)','Articles of Incorporation','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
+    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+  ]},
+  ae:{name:'UAE — Required KYC Documents',secs:[
+    {c:T,t:'Required Documents',items:['Trade License + name change cert (if applicable)','Memorandum of Association','Register of Shareholders','Register of Directors','Commercial Registration Certificate','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
+    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
+    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
+    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
+  ]}
+};
+var certUploads_en={
+  cn:[{l:'Business License',r:true}],
+  hk:[{l:'Certificate of Incorporation (CI)',r:true},{l:'Business Registration Certificate (BR)',r:true}],
+  uk:[{l:'Certificate of Incorporation (CI)',r:true},{l:'Name Change Certificate (if applicable)',r:false},{l:'Articles of Association',r:true}],
+  sg:[{l:'Certificate of Incorporation (CI)',r:true},{l:'Name Change Certificate (if applicable)',r:false},{l:'Articles of Association',r:true},{l:'Business Registration Certificate (BR)',r:true}],
+  us:[{l:'Name Change Certificate (if applicable)',r:false},{l:'Certificate of Good Standing',r:true},{l:'Articles of Incorporation',r:true},{l:'EIN Verification Letter',r:true},{l:'Signed Ownership Structure Chart',r:true}],
+  ca:[{l:'Certificate of Incorporation (CI)',r:true},{l:'Name Change Certificate (if applicable)',r:false},{l:'Articles of Incorporation',r:true},{l:'Signed Ownership Structure Chart',r:true}],
+  ae:[{l:'Trade License',r:true},{l:'Name Change Certificate (if applicable)',r:false},{l:'Memorandum of Association',r:true},{l:'Register of Shareholders',r:true},{l:'Register of Directors',r:true},{l:'Signed Ownership Structure Chart',r:true}]
+};
+var bn_en={
+  uk:'① If business address matches registered address, one proof is sufficient. ② If operations are outside the UK, provide both: address proof + document linking that address to your UK entity (e.g. signed outsourcing agreement).',
+  sg:'① If business address matches registered address, one proof is sufficient. ② If operations are outside Singapore, provide both: address proof + document linking that address to your Singapore entity.',
+  us:'① If business address matches registered address, one proof is sufficient. ② If operations are outside the US, provide both: address proof + document linking that address to your US entity.',
+  ca:'① If business address matches registered address, one proof is sufficient. ② If operations are outside Canada, provide both: address proof + document linking that address to your Canadian entity.',
+  ae:'① If business address matches registered address, one proof is sufficient. ② If operations are outside UAE, provide both: address proof + document linking that address to your UAE entity.'
+};
+
+// ── Save zh references
+var kyc_zh=kyc, certUploads_zh=certUploads, bn_zh=bn;
+
+// ── Translations ──────────────────────────────────────────────
+var lang='zh';
+var TL={
+  zh:{
+    pg_title:'企业认证',step1:'企业信息',step2:'法人/股东信息',step3:'授权认证',step4:'完成',
+    auth_person_title:'本次操作授权人',auth_role_label:'授权人身份',auth_doc_label:'证件类型',
+    poa_title:'授权委托书',poa_download:'&#128229; 下载授权委托书',poa_upload_link:'点击上传 授权委托书',
+    or_drag:'或 拖拽到此处',upload_hint_1:'PNG/JPG/JPEG/PDF，不超过10MB，最多1个',
+    auth_cert_title:'授权认证',auth_method_label:'认证方式',
+    btn_prev:'&#8593; 上一步',btn_save:'保存',btn_submit:'提交认证 &#10003;',
+    role_director:'董事',role_agent:'授权代理人',
+    doc_id2:'二代居民身份证',doc_hkid_old:'香港居民身份证（2003旧版）',
+    doc_hkid_new:'香港居民身份证（2018新版）',doc_passport:'护照',doc_other:'其他证件',
+    method_phone:'手机号认证',
+    method_pledge:'承诺函认证（需上传加盖公司公章的承诺函及手持承诺函照片）',
+    method_face:'人脸识别认证',
+    pledge_desc:'请填写公司任一授权董事签署的承诺函，加盖公司公章上传，并上传该董事手持承诺函照片',
+    pledge_download:'&#128229; 下载承诺函',
+    pledge_held:'手持承诺函照片',pledge_orig:'承诺函原件（加盖公章）',
+    phone_label:'手机号',phone_hint:'请输入实名认证手机号',
+    phone_note:'仅限中国大陆二代身份证实名手机号；其他地区请使用承诺函或人脸识别认证。',
+    face_note:'将通过摄像头进行实时人脸识别，请确保光线充足，仅支持PC端浏览器。',
+    face_btn:'开始人脸识别',
+    poa_desc_text:'请填写公司任一授权董事签署的授权委托书，加盖公司公章，上传授权委托书照片或者PDF文件'
+  },
+  en:{
+    pg_title:'Corporate Verification',step1:'Business Info',step2:'Legal Rep / Shareholders',
+    step3:'Authorization',step4:'Done',
+    auth_person_title:'Authorized Signatory',auth_role_label:'Role',auth_doc_label:'Document Type',
+    poa_title:'Power of Attorney',poa_download:'&#128229; Download PoA Template',
+    poa_upload_link:'Click to upload Power of Attorney',
+    or_drag:'or drag & drop',upload_hint_1:'PNG/JPG/JPEG/PDF, max 10 MB, 1 file',
+    auth_cert_title:'Authorization & Certification',auth_method_label:'Verification Method',
+    btn_prev:'&#8593; Previous',btn_save:'Save',btn_submit:'Submit &#10003;',
+    role_director:'Director',role_agent:'Authorized Agent',
+    doc_id2:'Chinese National ID (2nd Gen)',doc_hkid_old:'HK ID Card (2003 Version)',
+    doc_hkid_new:'HK ID Card (2018 Version)',doc_passport:'Passport',doc_other:'Other Document',
+    method_phone:'Phone Verification',
+    method_pledge:'Pledge Letter (company seal + director holding pledge photo)',
+    method_face:'Face Recognition',
+    pledge_desc:'Please have an authorized director sign the pledge letter, affix the company seal, then upload the document and a photo of the director holding it.',
+    pledge_download:'&#128229; Download Pledge Template',
+    pledge_held:'Director Holding Pledge (photo)',pledge_orig:'Pledge Letter with Company Seal',
+    phone_label:'Mobile Number',phone_hint:'Enter verified mobile number',
+    phone_note:'Only mainland China phones registered with a 2nd-gen national ID are supported. For other regions, please use Pledge Letter or Face Recognition.',
+    face_note:'Real-time face recognition via webcam. Ensure good lighting. Desktop browser only.',
+    face_btn:'Start Face Recognition',
+    poa_desc_text:'Please have an authorized director sign the Power of Attorney, affix the company seal, then upload a photo or PDF of the document.'
+  }
+};
+function t(k){return (TL[lang]&&TL[lang][k])||TL.zh[k]||k;}
+
+// ── i18n apply ────────────────────────────────────────────────
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');var v=t(k);if(v)el.innerHTML=v;
+  });
+  document.querySelectorAll('[data-i18n-opt]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-opt');var v=t(k);if(v)el.textContent=v;
+  });
+  kyc=lang==='en'?kyc_en:kyc_zh;
+  certUploads=lang==='en'?certUploads_en:certUploads_zh;
+  bn=lang==='en'?bn_en:bn_zh;
+  renderClist();
+  if(document.getElementById('pg2').classList.contains('show'))renderP2();
+  if(document.getElementById('pg4').classList.contains('show')){renderAuthDocUpload();renderAuthRole();renderAuthMethod();}
+  document.getElementById('lang-btn').textContent=lang==='en'?'简体中文':'English';
+}
+function toggleLang(){lang=lang==='zh'?'en':'zh';applyLang();}
+
+// ── pg4 navigation ────────────────────────────────────────────
+function goPg4(){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('show');});
+  document.getElementById('pg4').classList.add('show');
+  renderAuthDocUpload();renderAuthRole();renderAuthMethod();
+}
+
+// ── pg4 render helpers ────────────────────────────────────────
+function authPBox(lbl){
+  return '<div class="ubox" style="display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px"><div style="width:40px;height:48px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div><div class="uhint" style="text-align:left"><a>'+t('poa_upload_link').replace('授权委托书',lbl).replace('Power of Attorney',lbl)+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div>';
+}
+function authPBox2(l1,l2){
+  function h(l){return '<div class="pu-half"><div class="ulabel">'+l+'<span class="ureq">*</span></div><div class="ubox" style="display:flex;align-items:center;gap:8px;padding:10px;text-align:left"><div style="width:36px;height:44px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div><div class="uhint" style="text-align:left"><a>'+t('or_drag').replace('或 拖拽到此处','').replace('or drag & drop','')+'点击上传 '+l+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div></div>';}
+  return '<div class="pu-row">'+h(l1)+h(l2)+'</div>';
+}
+
+function renderAuthDocUpload(){
+  var sel=document.getElementById('auth-doc-type');
+  if(!sel)return;
+  var v=sel.value;
+  var lbl=sel.options[sel.selectedIndex].text;
+  var html='';
+  if(v==='id2'){
+    html=authPBox2(lang==='en'?'Front (Portrait side)':'身份证人像面',lang==='en'?'Back (Emblem side)':'身份证国徽面');
+  } else if(v==='hkid_old'){
+    html='<div class="pu-row">'+
+      '<div class="pu-half"><div class="ulabel">'+(lang==='en'?'HK ID Front':'证件正面')+'<span class="ureq">*</span></div>'+
+      '<div class="ubox" style="display:flex;align-items:center;gap:8px;padding:10px;text-align:left"><div style="width:36px;height:44px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div>'+
+      '<div class="uhint" style="text-align:left"><a>'+(lang==='en'?'Click to upload HK ID (2003)':'点击上传 香港居民身份证')+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div></div>'+
+      '<div class="pu-half"><div class="ulabel">'+(lang==='en'?'HK ID Back':'证件背面')+'<span class="uopt">'+(lang==='en'?' (optional)':'（选填）')+'</span></div>'+
+      '<div class="ubox" style="display:flex;align-items:center;gap:8px;padding:10px;text-align:left"><div style="width:36px;height:44px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div>'+
+      '<div class="uhint" style="text-align:left"><a>'+(lang==='en'?'Click to upload back':'点击上传 背面')+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div></div></div>';
+  } else if(v==='hkid_new'){
+    html=authPBox2(lang==='en'?'HK ID Front':'证件正面',lang==='en'?'HK ID Back':'证件背面');
+  } else {
+    html=pBox(lbl);
+  }
+  document.getElementById('auth-doc-upload').innerHTML=html;
+}
+
+function renderAuthRole(){
+  var sel=document.getElementById('auth-role');
+  if(!sel)return;
+  var isAgent=sel.value==='agent';
+  var poa=document.getElementById('fsec-poa');
+  if(poa)poa.style.display=isAgent?'block':'none';
+  // update poa desc text
+  var pd=document.getElementById('poa-desc');
+  if(pd)pd.innerHTML=t('poa_desc_text')+'&nbsp;<a style="color:#0B9DAF;cursor:pointer">'+t('poa_download')+'</a>';
+}
+
+function renderAuthMethod(){
+  var sel=document.getElementById('auth-method');
+  if(!sel)return;
+  var v=sel.value;
+  var html='';
+  if(v==='pledge'){
+    html='<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px;line-height:1.6">'+
+      t('pledge_desc')+'&nbsp;<a style="color:#0B9DAF;cursor:pointer">'+t('pledge_download')+'</a></div>'+
+      '<div class="auth-pledge-grid">'+
+      '<div><div class="ulabel">'+t('pledge_held')+'<span class="ureq">*</span></div>'+
+      '<div class="ubox" style="display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px"><div style="width:40px;height:48px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div>'+
+      '<div class="uhint" style="text-align:left"><a>'+(lang==='en'?'Click to upload':'点击上传')+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div></div>'+
+      '<div><div class="ulabel">'+t('pledge_orig')+'<span class="ureq">*</span></div>'+
+      '<div class="ubox" style="display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px"><div style="width:40px;height:48px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+PI+'</div>'+
+      '<div class="uhint" style="text-align:left"><a>'+(lang==='en'?'Click to upload':'点击上传')+'</a> '+t('or_drag')+'<br><small>'+t('upload_hint_1')+'</small></div></div></div></div>';
+  } else if(v==='phone'){
+    html='<div class="fg" style="max-width:320px"><label>'+t('phone_label')+' <span style="color:#D85A30">*</span></label>'+
+      '<div class="phone-input-row"><select class="phone-prefix"><option>+86</option><option>+852</option><option>+65</option><option>+1</option><option>+44</option><option>+971</option></select>'+
+      '<input style="flex:1;height:32px;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:0 9px;font-size:12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)" placeholder="'+t('phone_hint')+'"></div></div>'+
+      '<div class="tip" style="margin-top:8px">'+t('phone_note')+'</div>';
+  } else if(v==='face'){
+    html='<div class="face-tip">'+t('face_note')+'<br><button class="face-btn">'+
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 17c0-2.7 3.6-5 8-5s8 2.3 8 5"/><path d="M9 8a3 3 0 006 0"/></svg>'+
+      t('face_btn')+'</button></div>';
+  }
+  document.getElementById('auth-method-content').innerHTML=html;
+}
+
+// ── Lang-aware overrides for mkOrGroup and mkBiz ──────────────
+var mkOrGroup=function(id){
+  var isEn=lang==='en';
+  var hdr=isEn?'Domain Proof <em style="font-weight:400">or</em> Valid Shop URL':'域名证明 或 有效店铺地址证明';
+  var badge=isEn?'Choose one':'二选一';
+  var lName=isEn?'Domain Proof':'域名证明';
+  var lDesc=isEn?'Domain purchase record (incl. domain/company name) and domain registration certificate; or promotional proof (e.g. ad platform screenshots).':'域名购买记录（含域名/公司名称）及域名注册证书；或网站/店铺推广证明（如广告后台截图）。';
+  var rName=isEn?'Valid Shop URL':'有效店铺地址证明';
+  var rDesc=isEn?'Valid online store/platform URL screenshot showing store name, products and operating status, taken within the past 3 months.':'提供有效网店/平台店铺URL截图，需显示店铺名称、商品及经营状态，截图日期在近3个月内。';
+  var upTxt=isEn?'Click to upload':'点击上传';
+  var sub=isEn?'PNG/JPG/PDF, max 10 MB, up to 3 files':'PNG/JPG/PDF，不超过10MB，最多3个';
+  function side(sid,name,desc,active){var cls=active?'or-side sel':'or-side unsel';var dot=active?'or-dot on':'or-dot';return '<div class="'+cls+'" id="'+id+'-'+sid+'" onclick="swOr(\''+id+'\',\''+sid+'\')"><div class="or-side-top"><div class="'+dot+'" id="'+id+'-d-'+sid+'"></div><div class="or-name">'+name+'</div></div><div class="or-desc">'+desc+'</div><div class="or-upload"><div style="display:flex;align-items:center;justify-content:center;gap:5px">'+UP+'<span class="or-upload-txt">'+upTxt+'</span></div><div class="or-upload-sub">'+sub+'</div></div></div>';}
+  return '<div class="or-group"><div class="or-header">'+UP+'&nbsp;'+hdr+'<span class="ureq">*</span><span class="or-badge">'+badge+'</span></div><div class="or-cols">'+side('l',lName,lDesc,true)+'<div class="or-divider">OR</div>'+side('r',rName,rDesc,false)+'</div></div>';
+};
+
+var mkBiz=function(k){
+  var isEn=lang==='en';
+  var note=(isEn?bn_en:bn_zh)[k]||'';
+  var txRec=isEn?'6-Month Transaction History (incl. refunds & chargebacks)':'网站/平台近六个月历史交易记录（含退款、拒付记录）';
+  var txHint=isEn?'PNG/JPG/PDF, max 10 MB, up to 5 files':'PNG/JPG/PDF，不超过10MB，最多5个附件';
+  var txTip=isEn?'Note: New merchants without transaction history may submit website promotional proof.':'说明：若新商户无历史交易记录，可提交商户网站推广证明。';
+  var addrRec=isEn?'Business Address Proof':'营业地址证明';
+  var addrHint=isEn?'PNG/JPG/PDF, max 10 MB, up to 3 files':'PNG/JPG/PDF，不超过10MB，最多3个附件';
+  var addrTip=(note?note+'<br>':'')+(isEn?'Accepted: lease/title deed, utility/property bills (within 3 months), or on-site photo (with tenant name, photographer, date, full address).':'可接受文件：租赁合同或产权证明/近3个月水电/物业账单；或实地拍摄照片（含承租人姓名字条、拍摄人姓名、日期时间、详细地址）。');
+  var bankRec=isEn?'6-Month Bank Statements (per account)':'近6个月内的银行账户证明文件（逐个账户分别提供）';
+  var bankHint=isEn?'PNG/JPG/PDF, max 10 MB, up to 3 files per account':'PNG/JPG/PDF，不超过10MB，每账户最多3个附件';
+  var bankTip=isEn?'Must show company name, account number, and bank logo or official stamp.':'文件需显示公司主体名称、账号信息、带有银行LOGO或加盖银行章。';
+  var pciRec=isEn?'PCI DSS Compliance Certificate':'PCI合规安全证书';
+  var pciTip=isEn?'Provide if applicable.':'如适用则提供。';
+  return '<div class="ugrid c2"><div style="grid-column:1/-1">'+mkOrGroup('or-'+k)+'</div>'
+    +ubox(txRec,true,txHint,txTip)
+    +ubox(addrRec,true,addrHint,addrTip)
+    +ubox(bankRec,true,bankHint,bankTip)
+    +ubox(pciRec,false,'PNG/JPG/PDF，不超过10MB，最多1个附件',pciTip)
+    +'</div>';
+};
+</script>
