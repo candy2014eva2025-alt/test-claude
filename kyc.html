@@ -204,7 +204,7 @@ body{font-family:var(--font-sans);background:var(--color-background-tertiary);fo
         <option value="cn" data-i18n-opt="csel_cn">中国大陆</option><option value="hk" data-i18n-opt="csel_hk">中国香港</option>
         <option value="uk" data-i18n-opt="csel_uk">英国</option><option value="sg" data-i18n-opt="csel_sg">新加坡</option>
         <option value="us" data-i18n-opt="csel_us">美国</option><option value="ca" data-i18n-opt="csel_ca">加拿大</option>
-        <option value="ae" data-i18n-opt="csel_ae">阿联酋</option>
+        <option value="ae" data-i18n-opt="csel_ae">迪拜</option>
       </select>
     </div>
     <div id="p2-kyc"></div>
@@ -367,7 +367,7 @@ var GW={
   '新加坡':{'新加坡':['中区','东区','北区','西区','东北区']},
   '美国':{'加利福尼亚州':['洛杉矶','旧金山'],'纽约州':['纽约市','水牛城'],'德克萨斯州':['休斯顿','达拉斯'],'佛罗里达州':['迈阿密','奥兰多']},
   '加拿大':{'安大略省':['多伦多','渥太华'],'不列颠哥伦比亚省':['温哥华','素里'],'魁北克省':['蒙特利尔']},
-  '阿联酋':{'迪拜':['迪拜市中心','朱美拉','DIFC'],'阿布扎比':['阿布扎比市']},
+  '迪拜':{'迪拜':['迪拜市中心','朱美拉','DIFC'],'阿布扎比':['阿布扎比市']},
   '澳大利亚':{'新南威尔士州':['悉尼','纽卡斯尔'],'维多利亚州':['墨尔本'],'昆士兰州':['布里斯班','黄金海岸']},
   '日本':{'东京都':['新宿区','涩谷区','品川区'],'大阪府':['大阪市']},
   '其他':{'其他省/州':['其他城市']}
@@ -405,7 +405,7 @@ var kyc={
   sg:{name:'新加坡企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','商业登记证','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
   us:{name:'美国企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','良好存续证明','公司章程','雇主识别号(EIN)验证信','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
   ca:{name:'加拿大企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
-  ae:{name:'阿联酋企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['营业执照（以及历史更名证书，如适用）','公司章程','股东登记名册','董事登记名册','商业登记证','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]}
+  ae:{name:'迪拜企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['营业执照（以及历史更名证书，如适用）','公司章程','股东登记名册','董事登记名册','商业登记证','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]}
 };
 
 var certUploads={
@@ -423,7 +423,7 @@ var bn={
   sg:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非新加坡内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（新加坡公司）关系的文件。',
   us:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非美国内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（美国公司）关系的文件。',
   ca:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非加拿大内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（加拿大公司）关系的文件。',
-  ae:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非阿联酋内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（阿联酋公司）关系的文件。'
+  ae:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非迪拜内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（迪拜公司）关系的文件。'
 };
 
 function bSecs(secs){var h=Math.ceil(secs.length/2);function fn(s){return '<div class="ksec"><div class="kh"><div class="kdot" style="background:'+s.c+'"></div>'+s.t+'</div>'+s.items.map(function(i){return '<div class="ki'+(i[0]==='①'||i[0]==='②'?' sub':'')+'">'+i+'</div>';}).join('')+'</div>';}return '<div class="two-col"><div class="kyc-box">'+secs.slice(0,h).map(fn).join('<div class="kdivhr"></div>')+'</div><div class="kyc-box">'+secs.slice(h).map(fn).join('<div class="kdivhr"></div>')+'</div></div>';}
@@ -431,8 +431,7 @@ function bSecs(secs){var h=Math.ceil(secs.length/2);function fn(s){return '<div 
 function basicF(k){
   if(k==='cn')return '<div class="frow"><div class="fg"><label>统一社会信用代码 <span>*</span></label><input placeholder="18位统一社会信用代码"></div><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业名称 <span>*</span></label><input placeholder="请输入企业名称"></div></div><div class="frow"><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div></div><div class="frow"><div class="fg"><label>企业注册地址（省） <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>企业注册地址（市） <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业注册详细地址 <span>*</span></label><input placeholder="输入企业注册详细地址"></div></div>';
   if(k==='hk')return '<div class="frow"><div class="fg"><label>企业注册编号（CI） <span>*</span></label><input placeholder="CI左上角编号"></div><div class="fg"><label>企业商业登记号码 <span>*</span></label><input placeholder="16位商业登记号，如：66668888-000-00-00-A"></div></div><div class="frow"><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div></div><div class="frow"><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div><div class="fg"><label>企业中文名称 <span>*</span></label><input placeholder="输入企业中文名称"></div></div><div class="frow"><div class="fg"><label>企业注册地址（省） <span>*</span></label><select><option>香港特别行政区</option></select></div><div class="fg"><label>企业注册地址（市） <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业注册详细地址 <span>*</span></label><input placeholder="输入企业注册详细地址"></div></div><div class="frow"><div class="fg"><label>企业英文名称 <span>*</span></label><input placeholder="输入企业英文名称"></div><div class="fg"><label>企业英文地址 <span>*</span></label><input placeholder="输入企业英文地址"></div></div>';
-  // 注意：阿联酋 key 是 ae，地名统一用"阿联酋"
-  var cl={uk:'英国',sg:'新加坡',us:'美国',ca:'加拿大',ae:'阿联酋'}[k];
+  var cl={uk:'英国',sg:'新加坡',us:'美国',ca:'加拿大',ae:'迪拜'}[k];
   var reg=mkAF('reg-'+k,cl,k);
   var biz=mkAW('biz-'+k,k);
   var top='';
@@ -526,7 +525,7 @@ var kyc_en={
     {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
     {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
   ]},
-  ae:{name:'UAE — Required KYC Documents',secs:[
+  ae:{name:'Dubai — Required KYC Documents',secs:[
     {c:T,t:'Required Documents',items:['Trade License + name change cert (if applicable)','Memorandum of Association','Register of Shareholders','Register of Directors','Commercial Registration Certificate','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
     {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
     {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
@@ -585,7 +584,7 @@ var TL={
     notice:'请完成企业认证，我们将会在1~3个工作日内通知审核结果。完成后即可享受一站式外贸企业跨境金融和风控服务。',
     // pg2 static
     cert_reg:'企业注册地',
-    csel_cn:'中国大陆',csel_hk:'中国香港',csel_uk:'英国',csel_sg:'新加坡',csel_us:'美国',csel_ca:'加拿大',csel_ae:'阿联酋',
+    csel_cn:'中国大陆',csel_hk:'中国香港',csel_uk:'英国',csel_sg:'新加坡',csel_us:'美国',csel_ca:'加拿大',csel_ae:'迪拜',
     sec_docs:'企业证件',sec_biz_mat:'业务与交易背景材料',sec_basic:'企业基本信息',sec_biz_ops:'企业经营信息',
     lbl_industry:'主营行业（可多选）',lbl_regions:'主要资金往来地区和国家（可多选）',
     lbl_biz_type:'主营业务类型（可多选）',lbl_website:'企业网站（选填）',
@@ -654,7 +653,7 @@ var TL={
     notice:'Please complete corporate verification. We will notify you of the review result within 1–3 business days. Upon completion, you will have access to one-stop cross-border financial and risk control services.',
     // pg2 static
     cert_reg:'Registration Country',
-    csel_cn:'Mainland China',csel_hk:'Hong Kong, China',csel_uk:'United Kingdom',csel_sg:'Singapore',csel_us:'United States',csel_ca:'Canada',csel_ae:'UAE',
+    csel_cn:'Mainland China',csel_hk:'Hong Kong, China',csel_uk:'United Kingdom',csel_sg:'Singapore',csel_us:'United States',csel_ca:'Canada',csel_ae:'Dubai',
     sec_docs:'Company Documents',sec_biz_mat:'Business & Transaction Materials',sec_basic:'Basic Company Info',sec_biz_ops:'Business Operations',
     lbl_industry:'Primary Industry (multi-select)',lbl_regions:'Main Fund Regions (multi-select)',
     lbl_biz_type:'Business Type (multi-select)',lbl_website:'Company Website (optional)',
@@ -833,7 +832,7 @@ var mkOrGroup=function(id){
 
 // ── Country name helper for address selects ───────────────────
 function countryLabel(zh){
-  var m={'中国':'China','中国香港':'Hong Kong, China','英国':'United Kingdom','新加坡':'Singapore','美国':'United States','加拿大':'Canada','阿联酋':'UAE','澳大利亚':'Australia','日本':'Japan','其他':'Other'};
+  var m={'中国':'China','中国香港':'Hong Kong, China','英国':'United Kingdom','新加坡':'Singapore','美国':'United States','加拿大':'Canada','迪拜':'Dubai','澳大利亚':'Australia','日本':'Japan','其他':'Other'};
   return lang==='en'&&m[zh]?m[zh]:zh;
 }
 
@@ -855,7 +854,7 @@ var basicF=function(k){
   var sp=ps+'<option>'+t('opt_longterm')+'</option><option>'+t('opt_fixed')+'</option>';
   if(k==='cn') return '<div class="frow"><div class="fg"><label>'+t('lbl_uscc')+' <span>*</span></label><input placeholder="18位统一社会信用代码"></div><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_co_name')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div><div class="fg"><label>'+t('lbl_reg_date')+' <span>*</span></label><input type="date"></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_prov')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_reg_city_f')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_reg_addr')+' <span>*</span></label><input></div></div>';
   if(k==='hk') return '<div class="frow"><div class="fg"><label>'+t('lbl_ci')+' <span>*</span></label><input></div><div class="fg"><label>'+t('lbl_br')+' <span>*</span></label><input placeholder="66668888-000-00-00-A"></div></div><div class="frow"><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_date')+' <span>*</span></label><input type="date"></div><div class="fg"><label>'+t('lbl_co_cn_name')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_prov')+' <span>*</span></label><select><option>'+(lang==='en'?'Hong Kong SAR':'香港特别行政区')+'</option></select></div><div class="fg"><label>'+t('lbl_reg_city_f')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_reg_addr')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_co_en_name')+' <span>*</span></label><input></div><div class="fg"><label>'+t('lbl_co_en_addr')+' <span>*</span></label><input></div></div>';
-  var clMap={uk:lang==='en'?'United Kingdom':'英国',sg:lang==='en'?'Singapore':'新加坡',us:lang==='en'?'United States':'美国',ca:lang==='en'?'Canada':'加拿大',ae:lang==='en'?'UAE':'阿联酋'};
+  var clMap={uk:lang==='en'?'United Kingdom':'英国',sg:lang==='en'?'Singapore':'新加坡',us:lang==='en'?'United States':'美国',ca:lang==='en'?'Canada':'加拿大',ae:lang==='en'?'Dubai':'迪拜'};
   var cl=clMap[k]; var reg=mkAF('reg-'+k,cl,k); var biz=mkAW('biz-'+k,k); var top='';
   if(k==='us'){
     top=mkEIN('ein')+'<div class="frow"><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div></div>';
