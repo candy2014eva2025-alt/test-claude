@@ -1,7 +1,167 @@
 
 <style>
+:root{
+  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f8fafc;
+  --color-background-tertiary:#f1f5f9;
+  --color-text-primary:#0f172a;
+  --color-text-secondary:#64748b;
+  --color-text-tertiary:#94a3b8;
+  --color-border-primary:#e2e8f0;
+  --color-border-secondary:#cbd5e1;
+  --color-border-tertiary:#e2e8f0;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:var(--color-background-tertiary);font-size:13px}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary);font-size:13px;color:var(--color-text-primary)}
+.nav{background:#fff;border-bottom:1px solid #e9ecf0;padding:0 20px;height:48px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.logo-box{width:26px;height:26px;background:#0B9DAF;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px}
+.nav-logo{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13px;color:#0f172a}
+.nav-r{font-size:12px;color:var(--color-text-secondary);display:flex;gap:14px;align-items:center}
+.layout{display:flex;min-height:calc(100vh - 48px)}
+.sidebar{width:150px;background:#fff;border-right:1px solid #e9ecf0;padding:16px 0;flex-shrink:0}
+.si{padding:7px 18px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:color .15s,background .15s}
+.si:hover{color:#0B9DAF;background:rgba(11,157,175,0.05)}
+.si.act{color:#0B9DAF;background:rgba(11,157,175,0.09);font-weight:500}
+.sig{padding:6px 18px 3px;font-size:11px;color:var(--color-text-tertiary)}
+.main{flex:1;padding:20px;min-width:0;max-width:900px}
+.pg{display:none}.pg.show{display:block}
+.ptitle{font-size:16px;font-weight:600;color:#0f172a;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.uncert{background:#FEF3C7;color:#92400E;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:500}
+.notice{background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;padding:10px 14px;font-size:12px;color:#78350F;margin-bottom:16px;line-height:1.6}
+.clist{display:flex;flex-direction:column;gap:12px}
+.ccard{background:#fff;border:1px solid #e9ecf0;border-radius:10px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.ccard-title{font-size:12px;font-weight:600;color:#0f172a;padding-bottom:10px;margin-bottom:12px;border-bottom:1px solid #e9ecf0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.kyc-box{background:#f8fafc;border-radius:7px;padding:12px 14px}
+.ksec{margin-bottom:8px}
+.kh{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#0f172a;margin-bottom:4px}
+.kdot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ki{font-size:11px;color:#64748b;padding:2px 0 2px 14px;line-height:1.55;position:relative}
+.ki::before{content:"·";position:absolute;left:4px;color:#94a3b8}
+.ki.sub{padding-left:22px;color:#94a3b8}
+.ki.sub::before{left:12px}
+.kdivhr{height:1px;background:#e9ecf0;margin:8px 0}
+.step-bar{display:flex;align-items:center;margin-bottom:20px}
+.stp{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:72px}
+.stp-c{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.stp-c.on{background:#0B9DAF;color:#fff;box-shadow:0 0 0 3px rgba(11,157,175,0.2)}
+.stp-c.done{background:#5DCAA5;color:#fff}
+.stp-c.off{background:#f1f5f9;border:1px solid #e2e8f0;color:#94a3b8}
+.stp-l{font-size:11px;color:#64748b;text-align:center;white-space:nowrap}
+.sline{flex:1;height:1px;background:#e2e8f0;margin-bottom:14px}
+.sline.on{background:#0B9DAF}
+.fsec{background:#fff;border:1px solid #e9ecf0;border-radius:10px;padding:16px 18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.fsec-t{font-size:12px;font-weight:600;color:#0f172a;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.fsec-icon{width:16px;height:16px;background:#f1f5f9;border-radius:3px;display:flex;align-items:center;justify-content:center}
+.csr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.csr label{font-size:12px;color:#64748b;font-weight:500;white-space:nowrap}
+.csr select{height:34px;border:1px solid #d1d5db;border-radius:6px;padding:0 10px;font-size:12px;background:#fff;color:#0f172a;font-family:inherit;min-width:200px;cursor:pointer}
+.csr select:focus{outline:none;border-color:#0B9DAF;box-shadow:0 0 0 3px rgba(11,157,175,0.1)}
+.kyc-info{background:#f8fafc;border-radius:7px;padding:12px 14px;margin-bottom:14px}
+.ugrid{display:grid;gap:12px}
+.ugrid.c2{grid-template-columns:1fr 1fr}
+.ugrid.c3{grid-template-columns:1fr 1fr 1fr}
+.ulabel{font-size:11px;color:#64748b;margin-bottom:6px;font-weight:500}
+.uopt{font-size:10px;color:#94a3b8;margin-left:2px;font-weight:400}
+.ureq{color:#ef4444;margin-left:2px}
+.ubox{border:1.5px dashed #d1d5db;border-radius:8px;padding:16px 12px;text-align:center;cursor:pointer;background:#fff;transition:border-color .15s,background .15s}
+.ubox:hover{border-color:#0B9DAF;background:#f0fbfc}
+.uico{width:26px;height:26px;background:#f1f5f9;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 5px}
+.uhint{font-size:11px;color:#64748b;line-height:1.6}
+.uhint a{color:#0B9DAF;cursor:pointer;font-weight:500}
+.uhint small{font-size:10px;color:#94a3b8}
+.tip{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;padding:8px 10px;font-size:11px;color:#065f46;line-height:1.6;margin-top:7px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.frow.s1{grid-template-columns:1fr}
+.frow.s3{grid-template-columns:1fr 1fr 1fr}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;color:#64748b;font-weight:500}
+.fg label span{color:#ef4444}
+.fg input,.fg select{
+  height:34px;
+  border:1.5px solid #d1d5db;
+  border-radius:6px;
+  padding:0 10px;
+  font-size:12px;
+  background:#fff;
+  color:#0f172a;
+  font-family:inherit;
+  width:100%;
+  transition:border-color .15s,box-shadow .15s;
+}
+.fg input:focus,.fg select:focus{
+  outline:none;
+  border-color:#0B9DAF;
+  box-shadow:0 0 0 3px rgba(11,157,175,0.12);
+}
+.fg input::placeholder{color:#94a3b8}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:26px}
+.fg select:disabled,.fg input:disabled{color:#94a3b8;background:#f8fafc;border-color:#e9ecf0}
+.person-card{border:1px solid #e9ecf0;border-radius:8px;padding:14px 16px;margin-bottom:10px;background:#fafbfc}
+.person-head{display:flex;align-items:center;margin-bottom:12px;font-size:12px;font-weight:600;color:#0f172a}
+.tri{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #0B9DAF;margin-right:6px}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:#f8fafc;border:1px dashed #d1d5db;border-radius:7px;padding:8px;font-size:12px;color:#64748b;cursor:pointer;width:100%;margin-top:6px;transition:border-color .15s,color .15s}
+.add-btn:hover{border-color:#0B9DAF;color:#0B9DAF}
+.plus{color:#0B9DAF;font-size:16px;line-height:1;font-weight:300}
+.bnav{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid #e9ecf0}
+.btn-s{background:#fff;color:#64748b;border:1px solid #d1d5db;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.btn-s:hover{border-color:#94a3b8;color:#374151}
+.btn-p{background:#0B9DAF;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit;font-weight:500;transition:background .15s,box-shadow .15s}
+.btn-p:hover{background:#0a8fa0;box-shadow:0 2px 8px rgba(11,157,175,0.3)}
+.sub-hd{font-size:11px;font-weight:600;color:#64748b;margin:12px 0 8px;padding-top:12px;border-top:1px solid #e9ecf0;display:flex;align-items:center;gap:5px}
+.sdot{width:8px;height:8px;border-radius:2px;background:#0B9DAF;flex-shrink:0}
+.addr-box{background:#f8fafc;border:1px solid #e9ecf0;border-radius:8px;padding:12px 14px;margin-top:10px}
+.addr-head{font-size:11px;font-weight:500;color:#64748b;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.addr-link{color:#0B9DAF;font-size:11px;cursor:pointer;margin-left:4px;font-weight:500}
+.radio-row{display:flex;gap:16px;margin-top:5px}
+.radio-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#64748b;cursor:pointer}
+.rc{width:14px;height:14px;border-radius:50%;border:1.5px solid #d1d5db;flex-shrink:0;transition:border-color .15s}
+.rc.on{border-color:#0B9DAF;background:#0B9DAF;display:flex;align-items:center;justify-content:center}
+.rc.on::after{content:'';width:4px;height:4px;border-radius:50%;background:#fff}
+.pu-row{display:flex;gap:10px;margin-bottom:6px}
+.pu-half{flex:1}
+.or-group{border:1px solid #e9ecf0;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.or-header{background:#f8fafc;padding:9px 14px;font-size:11px;color:#64748b;display:flex;align-items:center;gap:6px;border-bottom:1px solid #e9ecf0;font-weight:500}
+.or-badge{background:#e0f7fa;color:#0B9DAF;font-size:10px;padding:1px 8px;border-radius:10px;font-weight:600}
+.or-cols{display:grid;grid-template-columns:1fr auto 1fr}
+.or-side{padding:14px;cursor:pointer;transition:background .12s}
+.or-side:hover{background:#f8fafc}
+.or-side.sel{background:#f0fbfc}
+.or-side.unsel{opacity:0.5}
+.or-side-top{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.or-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid #d1d5db;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.or-dot.on{border-color:#0B9DAF;background:#0B9DAF}
+.or-dot.on::after{content:'';width:4px;height:4px;border-radius:50%;background:#fff;display:block}
+.or-name{font-size:11px;font-weight:600;color:#0f172a}
+.or-desc{font-size:10px;color:#94a3b8;line-height:1.55;margin-bottom:8px;padding-left:21px}
+.or-upload{border:1px dashed #d1d5db;border-radius:6px;padding:10px;text-align:center;background:#fff}
+.sel .or-upload{border-color:#0B9DAF;background:#f0fbfc}
+.or-upload-txt{font-size:11px;color:#0B9DAF;margin-top:3px;font-weight:500}
+.or-upload-sub{font-size:10px;color:#94a3b8;margin-top:2px}
+.or-divider{display:flex;align-items:center;justify-content:center;width:32px;font-size:10px;font-weight:600;color:#94a3b8;background:#f8fafc;border-left:1px solid #e9ecf0;border-right:1px solid #e9ecf0}
+.ein-group{border:1px solid #e9ecf0;border-radius:8px;overflow:hidden;margin-bottom:12px}
+.ein-header{background:#f8fafc;padding:9px 14px;font-size:11px;color:#64748b;display:flex;align-items:center;gap:6px;border-bottom:1px solid #e9ecf0;font-weight:500}
+.ein-opts{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e9ecf0}
+.ein-opt{padding:12px 14px;cursor:pointer;transition:background .12s;border-right:1px solid #e9ecf0}
+.ein-opt:last-child{border-right:none}
+.ein-opt:hover{background:#f8fafc}
+.ein-opt.sel{background:#f0fbfc}
+.ein-opt.unsel{opacity:0.5}
+.ein-opt-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.ein-opt-name{font-size:11px;font-weight:600;color:#0f172a}
+.ein-opt-desc{font-size:10px;color:#94a3b8;line-height:1.5;padding-left:21px}
+.ein-input{padding:12px 14px}
+.lang-btn{cursor:pointer;padding:3px 10px;border-radius:5px;font-size:12px;color:#64748b;border:1px solid #d1d5db;background:#fff;font-family:inherit;transition:all .15s}
+.lang-btn:hover{border-color:#0B9DAF;color:#0B9DAF}
+.auth-pledge-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.phone-input-row{display:flex;gap:8px;align-items:center;margin-top:6px}
+.phone-prefix{width:76px;flex-shrink:0;height:34px;border:1.5px solid #d1d5db;border-radius:6px;padding:0 8px;font-size:12px;background:#fff;color:#0f172a;font-family:inherit}
+.phone-prefix:focus{outline:none;border-color:#0B9DAF}
+.face-tip{background:#f8fafc;border:1px solid #e9ecf0;border-radius:8px;padding:18px;text-align:center;font-size:12px;color:#64748b;line-height:1.7;margin-top:6px}
+.face-btn{display:inline-flex;align-items:center;gap:6px;background:#0B9DAF;color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:12px;cursor:pointer;font-family:inherit;margin-top:12px;font-weight:500}
+.face-btn:hover{background:#0a8fa0}
+</style>
 .nav{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:0 20px;height:46px;display:flex;align-items:center;justify-content:space-between}
 .logo-box{width:24px;height:24px;background:#0B9DAF;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:700}
 .nav-logo{display:flex;align-items:center;gap:6px;font-weight:500;font-size:13px;color:var(--color-text-primary)}
@@ -135,102 +295,102 @@ body{font-family:var(--font-sans);background:var(--color-background-tertiary);fo
 </div>
 <div class="layout">
 <div class="sidebar">
-  <div class="si">首页</div><div style="height:4px"></div>
-  <div class="sig">&#8964; 个人中心</div>
-  <div class="si">账号与安全</div><div class="si act">企业认证</div>
-  <div class="si">团队管理</div><div class="si">我的费率</div><div class="si">我的权益</div>
+  <div class="si" data-i18n="nav_home">首页</div><div style="height:4px"></div>
+  <div class="sig" data-i18n="nav_personal">&#8964; 个人中心</div>
+  <div class="si" data-i18n="nav_acct">账号与安全</div><div class="si act" data-i18n="nav_cert_menu">企业认证</div>
+  <div class="si" data-i18n="nav_team">团队管理</div><div class="si" data-i18n="nav_rate">我的费率</div><div class="si" data-i18n="nav_perk">我的权益</div>
 </div>
 <div class="main">
 
 <div class="pg show" id="pg1">
-  <div class="ptitle">企业认证 <span class="uncert">未认证</span>
-    <button class="btn-p" style="margin-left:auto" onclick="goPg2()">企业认证</button></div>
-  <div class="notice">请完成企业认证，我们将会在1~3个工作日内通知审核结果。完成后即可享受一站式外贸企业跨境金融和风控服务。</div>
+  <div class="ptitle"><span data-i18n="pg1_h">企业认证</span> <span class="uncert" data-i18n="uncert">未认证</span>
+    <button class="btn-p" style="margin-left:auto" onclick="goPg2()" data-i18n="btn_start_cert">企业认证</button></div>
+  <div class="notice" data-i18n="notice">请完成企业认证，我们将会在1~3个工作日内通知审核结果。完成后即可享受一站式外贸企业跨境金融和风控服务。</div>
   <div class="clist" id="clist"></div>
 </div>
 
 <div class="pg" id="pg2">
-  <div class="ptitle" style="margin-bottom:16px">企业认证</div>
+  <div class="ptitle" style="margin-bottom:16px" data-i18n="pg_title">企业认证</div>
   <div class="step-bar">
-    <div class="stp"><div class="stp-c on">&#9964;</div><div class="stp-l">企业信息</div></div>
+    <div class="stp"><div class="stp-c on">&#9964;</div><div class="stp-l" data-i18n="step1">企业信息</div></div>
     <div class="sline on"></div>
-    <div class="stp"><div class="stp-c off">&#9965;</div><div class="stp-l">法人/股东信息</div></div>
+    <div class="stp"><div class="stp-c off">&#9965;</div><div class="stp-l" data-i18n="step2">法人/股东信息</div></div>
     <div class="sline"></div>
-    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">授权认证</div></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l" data-i18n="step3">授权认证</div></div>
     <div class="sline"></div>
-    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">完成</div></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l" data-i18n="step4">完成</div></div>
   </div>
   <div class="fsec">
-    <div class="csr"><label>企业注册地</label>
+    <div class="csr"><label data-i18n="cert_reg">企业注册地</label>
       <select id="csel" onchange="renderP2()">
-        <option value="cn">中国大陆</option><option value="hk">中国香港</option>
-        <option value="uk">英国</option><option value="sg">新加坡</option>
-        <option value="us">美国</option><option value="ca">加拿大</option>
-        <option value="ae">阿联酋</option>
+        <option value="cn" data-i18n-opt="csel_cn">中国大陆</option><option value="hk" data-i18n-opt="csel_hk">中国香港</option>
+        <option value="uk" data-i18n-opt="csel_uk">英国</option><option value="sg" data-i18n-opt="csel_sg">新加坡</option>
+        <option value="us" data-i18n-opt="csel_us">美国</option><option value="ca" data-i18n-opt="csel_ca">加拿大</option>
+        <option value="ae" data-i18n-opt="csel_ae">阿联酋</option>
       </select>
     </div>
     <div id="p2-kyc"></div>
   </div>
-  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg></div>企业证件</div><div id="p2-certs"></div></div>
-  <div class="fsec" id="fsec-biz" style="display:none"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8h6M8 5v6"/></svg></div>业务与交易背景材料</div><div id="p2-biz"></div></div>
-  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div>企业基本信息</div><div id="p2-basic"></div></div>
-  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div>企业经营信息</div>
-    <div class="frow"><div class="fg"><label>主营行业（可多选）</label><select><option>请选择</option></select></div><div class="fg"><label>主要资金往来地区和国家（可多选）</label><select><option>请选择</option></select></div></div>
-    <div class="frow"><div class="fg"><label>主营业务类型（可多选）</label><select><option>请选择</option></select></div><div class="fg"><label>企业网站（选填）</label><input placeholder="如需使用凭证，请输入企业网站网址"></div></div>
-    <div class="frow"><div class="fg"><label>年交易额（万美元）</label><input placeholder="万美元"></div><div class="fg"><label>产品或服务平均交付周期（选填）</label><input placeholder="天"></div></div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><path d="M4 2h6l4 4v8a1 1 0 01-1 1H4a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg></div><span data-i18n="sec_docs">企业证件</span></div><div id="p2-certs"></div></div>
+  <div class="fsec" id="fsec-biz" style="display:none"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M5 8h6M8 5v6"/></svg></div><span data-i18n="sec_biz_mat">业务与交易背景材料</span></div><div id="p2-biz"></div></div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div><span data-i18n="sec_basic">企业基本信息</span></div><div id="p2-basic"></div></div>
+  <div class="fsec"><div class="fsec-t"><div class="fsec-icon"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="var(--color-text-secondary)" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1"/><path d="M2 7h12"/></svg></div><span data-i18n="sec_biz_ops">企业经营信息</span></div>
+    <div class="frow"><div class="fg"><label data-i18n="lbl_industry">主营行业（可多选）</label><select><option data-i18n-opt="select_ph">请选择</option></select></div><div class="fg"><label data-i18n="lbl_regions">主要资金往来地区和国家（可多选）</label><select><option data-i18n-opt="select_ph">请选择</option></select></div></div>
+    <div class="frow"><div class="fg"><label data-i18n="lbl_biz_type">主营业务类型（可多选）</label><select><option data-i18n-opt="select_ph">请选择</option></select></div><div class="fg"><label data-i18n="lbl_website">企业网站（选填）</label><input placeholder="如需使用凭证，请输入企业网站网址"></div></div>
+    <div class="frow"><div class="fg"><label data-i18n="lbl_vol">年交易额（万美元）</label><input placeholder="万美元"></div><div class="fg"><label data-i18n="lbl_delivery">产品或服务平均交付周期（选填）</label><input placeholder="天"></div></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-    <div class="fsec" style="margin-bottom:0"><div class="fsec-t">股权相关材料（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5">若控股股东为公司，请上传带签章的股权架构图、所有股东公司的注册文件和对应法人/董事的身份证件，以及最终受益人的身份证件</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a>点击上传股权相关材料</a> 或 拖拽到此处<br><small>PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
-    <div class="fsec" style="margin-bottom:0"><div class="fsec-t">其他附件（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5">您可以上传历史贸易材料，如：PI/CI/合同，物流单据等，帮助您快速通过审核</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a>点击上传其他附件</a> 或 拖拽到此处<br><small>PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
+    <div class="fsec" style="margin-bottom:0"><div class="fsec-t" data-i18n="sec_equity">股权相关材料（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5" data-i18n="equity_hint">若控股股东为公司，请上传带签章的股权架构图、所有股东公司的注册文件和对应法人/董事的身份证件，以及最终受益人的身份证件</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a data-i18n="equity_upload_link">点击上传股权相关材料</a> <span data-i18n="or_drag">或 拖拽到此处</span><br><small data-i18n="upload_hint_10">PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
+    <div class="fsec" style="margin-bottom:0"><div class="fsec-t" data-i18n="sec_other">其他附件（选填）</div><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;line-height:1.5" data-i18n="other_hint">您可以上传历史贸易材料，如：PI/CI/合同，物流单据等，帮助您快速通过审核</div><div class="ubox"><div class="uico"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#0B9DAF" stroke-width="1.5"><path d="M8 11V5M5 8l3-3 3 3M3 13h10"/></svg></div><div class="uhint"><a data-i18n="other_upload_link">点击上传其他附件</a> <span data-i18n="or_drag">或 拖拽到此处</span><br><small data-i18n="upload_hint_10">PNG/JPG/PDF，不超过10MB，最多10个附件</small></div></div></div>
   </div>
-  <div class="bnav"><button class="btn-s" onclick="goPg1()">返回</button><button class="btn-s">保存</button><button class="btn-p" onclick="goPg3()">下一步 &#8594;</button></div>
+  <div class="bnav"><button class="btn-s" onclick="goPg1()" data-i18n="btn_back">返回</button><button class="btn-s" data-i18n="btn_save">保存</button><button class="btn-p" onclick="goPg3()" data-i18n="btn_next">下一步 &#8594;</button></div>
 </div>
 
 <div class="pg" id="pg3">
-  <div class="ptitle" style="margin-bottom:16px">企业认证</div>
+  <div class="ptitle" style="margin-bottom:16px" data-i18n="pg_title">企业认证</div>
   <div class="step-bar">
-    <div class="stp"><div class="stp-c done">&#10003;</div><div class="stp-l">企业信息</div></div>
+    <div class="stp"><div class="stp-c done">&#10003;</div><div class="stp-l" data-i18n="step1">企业信息</div></div>
     <div class="sline on"></div>
-    <div class="stp"><div class="stp-c on">&#9965;</div><div class="stp-l">法人/股东信息</div></div>
+    <div class="stp"><div class="stp-c on">&#9965;</div><div class="stp-l" data-i18n="step2">法人/股东信息</div></div>
     <div class="sline"></div>
-    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">授权认证</div></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l" data-i18n="step3">授权认证</div></div>
     <div class="sline"></div>
-    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l">完成</div></div>
+    <div class="stp"><div class="stp-c off">&#10003;</div><div class="stp-l" data-i18n="step4">完成</div></div>
   </div>
-  <div class="fsec"><div class="fsec-t">董事信息</div>
+  <div class="fsec"><div class="fsec-t" data-i18n="sec_director">董事信息</div>
     <div class="person-card">
-      <div class="person-head"><div class="tri"></div>董事 1</div>
-      <div class="frow" style="margin-bottom:8px"><div class="fg"><label>证件类型</label><select id="dir-type" onchange="renderDirUpload()"><option value="id2">二代居民身份证</option><option value="passport">护照</option><option value="hkid">香港永久居民身份证</option></select></div><div class="fg"></div></div>
+      <div class="person-head"><div class="tri"></div><span data-i18n="dir_label">董事</span> 1</div>
+      <div class="frow" style="margin-bottom:8px"><div class="fg"><label data-i18n="lbl_doc_type">证件类型</label><select id="dir-type" onchange="renderDirUpload()"><option value="id2" data-i18n-opt="doc_id2_s">二代居民身份证</option><option value="passport" data-i18n-opt="doc_passport_s">护照</option><option value="hkid" data-i18n-opt="doc_hkid_s">香港永久居民身份证</option></select></div><div class="fg"></div></div>
       <div id="dir-upload"></div>
-      <div class="sub-hd"><div class="sdot"></div>身份信息</div>
-      <div class="frow"><div class="fg"><label>董事姓名 <span>*</span></label><input placeholder="输入董事姓名"></div><div class="fg"><label>董事英文姓名 <span>*</span></label><input placeholder="输入董事英文姓名"></div></div>
-      <div class="frow"><div class="fg"><label>董事证件号码 <span>*</span></label><input placeholder="输入董事证件号码"></div><div class="fg"><label>董事国籍 <span>*</span></label><select><option>请选择</option></select></div></div>
-      <div class="frow"><div class="fg"><label>董事生日 <span>*</span></label><input type="date"></div><div class="fg"><label>董事证件有效期 <span>*</span></label><select><option>请选择</option><option>长期</option><option>有限期</option></select></div></div>
-      <div class="frow"><div class="fg"><label>证件起始日期</label><input type="date"></div><div class="fg"></div></div>
-      <div class="sub-hd"><div class="sdot"></div>居住地址</div>
+      <div class="sub-hd"><div class="sdot"></div><span data-i18n="sub_identity">身份信息</span></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_dir_name">董事姓名</span> <span>*</span></label><input placeholder="输入董事姓名"></div><div class="fg"><label><span data-i18n="lbl_dir_name_en">董事英文姓名</span> <span>*</span></label><input placeholder="输入董事英文姓名"></div></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_dir_id">董事证件号码</span> <span>*</span></label><input placeholder="输入董事证件号码"></div><div class="fg"><label><span data-i18n="lbl_dir_nationality">董事国籍</span> <span>*</span></label><select><option data-i18n-opt="select_ph">请选择</option></select></div></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_dir_dob">董事生日</span> <span>*</span></label><input type="date"></div><div class="fg"><label><span data-i18n="lbl_id_expiry">董事证件有效期</span> <span>*</span></label><select><option data-i18n-opt="select_ph">请选择</option><option data-i18n-opt="opt_longterm">长期</option><option data-i18n-opt="opt_fixed">有限期</option></select></div></div>
+      <div class="frow"><div class="fg"><label data-i18n="lbl_issue_date">证件起始日期</label><input type="date"></div><div class="fg"></div></div>
+      <div class="sub-hd"><div class="sdot"></div><span data-i18n="sub_address">居住地址</span></div>
       <div id="dir-addr"></div>
-      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a>点击上传 地址证明文件</a> 或 拖拽到此处<br><small>PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
-      <div style="margin-top:10px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px">是否为最终受益人 <span style="color:#D85A30">*</span></div><div class="radio-row"><div class="radio-item"><div class="rc"></div>是</div><div class="radio-item"><div class="rc on"></div>否</div></div></div>
+      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a data-i18n="addr_proof_link">点击上传 地址证明文件</a> <span data-i18n="or_drag">或 拖拽到此处</span><br><small data-i18n="upload_hint_1">PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
+      <div style="margin-top:10px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)"><div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:5px" data-i18n="is_ubo_q">是否为最终受益人 <span style="color:#D85A30">*</span></div><div class="radio-row"><div class="radio-item"><div class="rc"></div><span data-i18n="opt_yes">是</span></div><div class="radio-item"><div class="rc on"></div><span data-i18n="opt_no">否</span></div></div></div>
     </div>
-    <div class="add-btn"><span class="plus">+</span> 添加其他董事</div>
+    <div class="add-btn"><span class="plus">+</span> <span data-i18n="add_director">添加其他董事</span></div>
   </div>
-  <div class="fsec"><div class="fsec-t">最终受益人信息</div>
+  <div class="fsec"><div class="fsec-t" data-i18n="sec_ubo">最终受益人信息</div>
     <div class="person-card">
-      <div class="person-head"><div class="tri"></div>最终受益人 1</div>
-      <div class="frow" style="margin-bottom:8px"><div class="fg"><label>证件类型</label><select id="ubo-type" onchange="renderUboUpload()"><option value="id2">二代居民身份证</option><option value="passport">护照</option><option value="hkid">香港永久居民身份证</option><option value="other">其他证件</option></select></div><div class="fg"></div></div>
+      <div class="person-head"><div class="tri"></div><span data-i18n="ubo_label">最终受益人</span> 1</div>
+      <div class="frow" style="margin-bottom:8px"><div class="fg"><label data-i18n="lbl_doc_type">证件类型</label><select id="ubo-type" onchange="renderUboUpload()"><option value="id2" data-i18n-opt="doc_id2_s">二代居民身份证</option><option value="passport" data-i18n-opt="doc_passport_s">护照</option><option value="hkid" data-i18n-opt="doc_hkid_s">香港永久居民身份证</option><option value="other" data-i18n-opt="doc_other_s">其他证件</option></select></div><div class="fg"></div></div>
       <div id="ubo-upload"></div>
-      <div class="sub-hd"><div class="sdot"></div>身份信息</div>
-      <div class="frow"><div class="fg"><label>受益人姓名 <span>*</span></label><input placeholder="输入受益人姓名"></div><div class="fg"><label>受益人英文姓名 <span>*</span></label><input placeholder="输入受益人英文姓名"></div></div>
-      <div class="frow"><div class="fg"><label>受益人证件号码 <span>*</span></label><input placeholder="输入受益人证件号码"></div><div class="fg"><label>受益人国籍 <span>*</span></label><select><option>请选择</option></select></div></div>
-      <div class="frow"><div class="fg"><label>受益人生日 <span>*</span></label><input type="date"></div><div class="fg"><label>受益人证件有效期 <span>*</span></label><select><option>请选择</option><option>长期</option><option>有限期</option></select></div></div>
-      <div class="frow"><div class="fg"><label>证件起始日期</label><input type="date"></div><div class="fg"><label>占股比例 <span>*</span></label><div style="display:flex;align-items:center;gap:6px"><input placeholder="输入占股比例" style="flex:1"><span style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap">%</span></div></div></div>
-      <div class="sub-hd"><div class="sdot"></div>居住地址</div>
+      <div class="sub-hd"><div class="sdot"></div><span data-i18n="sub_identity">身份信息</span></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_ubo_name">受益人姓名</span> <span>*</span></label><input placeholder="输入受益人姓名"></div><div class="fg"><label><span data-i18n="lbl_ubo_name_en">受益人英文姓名</span> <span>*</span></label><input placeholder="输入受益人英文姓名"></div></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_ubo_id">受益人证件号码</span> <span>*</span></label><input placeholder="输入受益人证件号码"></div><div class="fg"><label><span data-i18n="lbl_ubo_nationality">受益人国籍</span> <span>*</span></label><select><option data-i18n-opt="select_ph">请选择</option></select></div></div>
+      <div class="frow"><div class="fg"><label><span data-i18n="lbl_ubo_dob">受益人生日</span> <span>*</span></label><input type="date"></div><div class="fg"><label><span data-i18n="lbl_ubo_expiry">受益人证件有效期</span> <span>*</span></label><select><option data-i18n-opt="select_ph">请选择</option><option data-i18n-opt="opt_longterm">长期</option><option data-i18n-opt="opt_fixed">有限期</option></select></div></div>
+      <div class="frow"><div class="fg"><label data-i18n="lbl_issue_date">证件起始日期</label><input type="date"></div><div class="fg"><label><span data-i18n="lbl_share_pct">占股比例</span> <span>*</span></label><div style="display:flex;align-items:center;gap:6px"><input placeholder="输入占股比例" style="flex:1"><span style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap">%</span></div></div></div>
+      <div class="sub-hd"><div class="sdot"></div><span data-i18n="sub_address">居住地址</span></div>
       <div id="ubo-addr"></div>
-      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a>点击上传 地址证明文件</a> 或 拖拽到此处<br><small>PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
+      <div class="ubox" style="padding:10px 12px;text-align:left;display:flex;align-items:center;gap:10px;margin-top:8px"><div style="width:38px;height:46px;background:var(--color-background-secondary);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-tertiary)" stroke-width="1.2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg></div><div class="uhint" style="text-align:left"><a data-i18n="addr_proof_link">点击上传 地址证明文件</a> <span data-i18n="or_drag">或 拖拽到此处</span><br><small data-i18n="upload_hint_1">PNG/JPG/JPEG/PDF，不超过10MB，最多1个</small></div></div>
     </div>
-    <div class="add-btn"><span class="plus">+</span> 添加最终受益人</div>
+    <div class="add-btn"><span class="plus">+</span> <span data-i18n="add_ubo">添加最终受益人</span></div>
   </div>
-  <div class="bnav"><button class="btn-s" onclick="goPg2()">&#8593; 上一步</button><button class="btn-s">保存</button><button class="btn-p" onclick="goPg4()">下一步 &#8594;</button></div>
+  <div class="bnav"><button class="btn-s" onclick="goPg2()" data-i18n="btn_prev_step">&#8593; 上一步</button><button class="btn-s" data-i18n="btn_save">保存</button><button class="btn-p" onclick="goPg4()" data-i18n="btn_next">下一步 &#8594;</button></div>
 </div>
 
 <div class="pg" id="pg4">
@@ -537,7 +697,50 @@ var TL={
     phone_note:'仅限中国大陆二代身份证实名手机号；其他地区请使用承诺函或人脸识别认证。',
     face_note:'将通过摄像头进行实时人脸识别，请确保光线充足，仅支持PC端浏览器。',
     face_btn:'开始人脸识别',
-    poa_desc_text:'请填写公司任一授权董事签署的授权委托书，加盖公司公章，上传授权委托书照片或者PDF文件'
+    poa_desc_text:'请填写公司任一授权董事签署的授权委托书，加盖公司公章，上传授权委托书照片或者PDF文件',
+    // nav/sidebar
+    nav_home:'首页',nav_personal:'↘ 个人中心',nav_acct:'账号与安全',nav_cert_menu:'企业认证',
+    nav_team:'团队管理',nav_rate:'我的费率',nav_perk:'我的权益',
+    // pg1
+    pg1_h:'企业认证',uncert:'未认证',btn_start_cert:'企业认证',
+    notice:'请完成企业认证，我们将会在1~3个工作日内通知审核结果。完成后即可享受一站式外贸企业跨境金融和风控服务。',
+    // pg2 static
+    cert_reg:'企业注册地',
+    csel_cn:'中国大陆',csel_hk:'中国香港',csel_uk:'英国',csel_sg:'新加坡',csel_us:'美国',csel_ca:'加拿大',csel_ae:'阿联酋',
+    sec_docs:'企业证件',sec_biz_mat:'业务与交易背景材料',sec_basic:'企业基本信息',sec_biz_ops:'企业经营信息',
+    lbl_industry:'主营行业（可多选）',lbl_regions:'主要资金往来地区和国家（可多选）',
+    lbl_biz_type:'主营业务类型（可多选）',lbl_website:'企业网站（选填）',
+    lbl_vol:'年交易额（万美元）',lbl_delivery:'产品或服务平均交付周期（选填）',
+    sec_equity:'股权相关材料（选填）',equity_hint:'若控股股东为公司，请上传带签章的股权架构图、所有股东公司的注册文件和对应法人/董事的身份证件，以及最终受益人的身份证件',
+    equity_upload_link:'点击上传股权相关材料',
+    sec_other:'其他附件（选填）',other_hint:'您可以上传历史贸易材料，如：PI/CI/合同，物流单据等，帮助您快速通过审核',
+    other_upload_link:'点击上传其他附件',
+    upload_hint_10:'PNG/JPG/PDF，不超过10MB，最多10个附件',
+    btn_back:'返回',btn_next:'下一步 →',btn_prev_step:'↑ 上一步',
+    // pg3
+    sec_director:'董事信息',dir_label:'董事',sec_ubo:'最终受益人信息',ubo_label:'最终受益人',
+    lbl_doc_type:'证件类型',sub_identity:'身份信息',sub_address:'居住地址',
+    doc_id2_s:'二代居民身份证',doc_passport_s:'护照',doc_hkid_s:'香港永久居民身份证',doc_other_s:'其他证件',
+    lbl_dir_name:'董事姓名',lbl_dir_name_en:'董事英文姓名',lbl_dir_id:'董事证件号码',
+    lbl_dir_nationality:'董事国籍',lbl_dir_dob:'董事生日',lbl_id_expiry:'董事证件有效期',
+    lbl_issue_date:'证件起始日期',
+    select_ph:'请选择',opt_longterm:'长期',opt_fixed:'有限期',
+    addr_proof_link:'点击上传 地址证明文件',
+    is_ubo_q:'是否为最终受益人 <span style="color:#D85A30">*</span>',opt_yes:'是',opt_no:'否',
+    add_director:'添加其他董事',
+    lbl_ubo_name:'受益人姓名',lbl_ubo_name_en:'受益人英文姓名',lbl_ubo_id:'受益人证件号码',
+    lbl_ubo_nationality:'受益人国籍',lbl_ubo_dob:'受益人生日',lbl_ubo_expiry:'受益人证件有效期',
+    lbl_share_pct:'占股比例',add_ubo:'添加最终受益人',
+    // basicF / address labels
+    lbl_uscc:'统一社会信用代码',lbl_co_type:'企业类型',lbl_co_name:'企业名称',
+    lbl_biz_period:'营业期限',lbl_reg_date:'企业注册日期',lbl_reg_prov:'企业注册地址（省）',
+    lbl_reg_city_f:'企业注册地址（市）',lbl_reg_addr:'企业注册详细地址',
+    lbl_ci:'公司注册编号（CI）',lbl_br:'企业商业登记号码',lbl_co_cn_name:'企业中文名称',
+    lbl_co_en_name:'企业英文名称',lbl_co_en_addr:'企业英文地址',
+    lbl_country:'国家/地区',lbl_province:'省/州',lbl_city:'城市',lbl_detail_addr:'详细地址',
+    lbl_biz_addr:'企业经营地址',lbl_same_reg:'若与注册地址一致',lbl_autofill:'一键填入',
+    lbl_reg_addr_title:'企业注册地址',ph_select:'请选择',ph_prov_first:'请先选择省/州',ph_country_first:'请先选择国家/地区',
+    lbl_ein_or_ci:'企业注册编号 或 雇主识别号(EIN)'
   },
   en:{
     pg_title:'Corporate Verification',step1:'Business Info',step2:'Legal Rep / Shareholders',
@@ -561,7 +764,50 @@ var TL={
     phone_note:'Only mainland China phones registered with a 2nd-gen national ID are supported. For other regions, please use Pledge Letter or Face Recognition.',
     face_note:'Real-time face recognition via webcam. Ensure good lighting. Desktop browser only.',
     face_btn:'Start Face Recognition',
-    poa_desc_text:'Please have an authorized director sign the Power of Attorney, affix the company seal, then upload a photo or PDF of the document.'
+    poa_desc_text:'Please have an authorized director sign the Power of Attorney, affix the company seal, then upload a photo or PDF of the document.',
+    // nav/sidebar
+    nav_home:'Home',nav_personal:'↘ Account',nav_acct:'Account & Security',nav_cert_menu:'Corporate KYC',
+    nav_team:'Team',nav_rate:'My Rates',nav_perk:'Benefits',
+    // pg1
+    pg1_h:'Corporate Verification',uncert:'Unverified',btn_start_cert:'Start KYC',
+    notice:'Please complete corporate verification. We will notify you of the review result within 1–3 business days. Upon completion, you will have access to one-stop cross-border financial and risk control services.',
+    // pg2 static
+    cert_reg:'Registration Country',
+    csel_cn:'Mainland China',csel_hk:'Hong Kong, China',csel_uk:'United Kingdom',csel_sg:'Singapore',csel_us:'United States',csel_ca:'Canada',csel_ae:'UAE',
+    sec_docs:'Company Documents',sec_biz_mat:'Business & Transaction Materials',sec_basic:'Basic Company Info',sec_biz_ops:'Business Operations',
+    lbl_industry:'Primary Industry (multi-select)',lbl_regions:'Main Fund Regions (multi-select)',
+    lbl_biz_type:'Business Type (multi-select)',lbl_website:'Company Website (optional)',
+    lbl_vol:'Annual Volume (USD 10k)',lbl_delivery:'Avg. Delivery Cycle (optional)',
+    sec_equity:'Shareholding Documents (optional)',equity_hint:'If the controlling shareholder is a company, upload a signed ownership structure chart, registration docs of all shareholder companies, their legal rep/director IDs, and UBO IDs.',
+    equity_upload_link:'Click to upload shareholding documents',
+    sec_other:'Other Attachments (optional)',other_hint:'You may upload historical trade documents such as PI/CI, contracts, shipping documents, etc. to speed up your review.',
+    other_upload_link:'Click to upload attachments',
+    upload_hint_10:'PNG/JPG/PDF, max 10 MB, up to 10 files',
+    btn_back:'Back',btn_next:'Next →',btn_prev_step:'↑ Previous',
+    // pg3
+    sec_director:'Director Information',dir_label:'Director',sec_ubo:'Ultimate Beneficial Owner (UBO)',ubo_label:'UBO',
+    lbl_doc_type:'Document Type',sub_identity:'Personal Details',sub_address:'Residential Address',
+    doc_id2_s:'Chinese National ID (2nd Gen)',doc_passport_s:'Passport',doc_hkid_s:'HK Permanent Resident ID',doc_other_s:'Other Document',
+    lbl_dir_name:'Director Name',lbl_dir_name_en:'Director Name (English)',lbl_dir_id:'Director ID Number',
+    lbl_dir_nationality:'Director Nationality',lbl_dir_dob:'Director Date of Birth',lbl_id_expiry:'ID Expiry',
+    lbl_issue_date:'ID Issue Date',
+    select_ph:'Please select',opt_longterm:'Perpetual',opt_fixed:'Fixed Term',
+    addr_proof_link:'Click to upload Address Proof',
+    is_ubo_q:'Is this person a UBO? <span style="color:#D85A30">*</span>',opt_yes:'Yes',opt_no:'No',
+    add_director:'Add Director',
+    lbl_ubo_name:'UBO Name',lbl_ubo_name_en:'UBO Name (English)',lbl_ubo_id:'UBO ID Number',
+    lbl_ubo_nationality:'UBO Nationality',lbl_ubo_dob:'UBO Date of Birth',lbl_ubo_expiry:'UBO ID Expiry',
+    lbl_share_pct:'Shareholding (%)',add_ubo:'Add UBO',
+    // basicF / address labels
+    lbl_uscc:'Unified Social Credit Code',lbl_co_type:'Company Type',lbl_co_name:'Company Name',
+    lbl_biz_period:'Business Period',lbl_reg_date:'Registration Date',lbl_reg_prov:'Registration Province',
+    lbl_reg_city_f:'Registration City',lbl_reg_addr:'Registration Address',
+    lbl_ci:'Certificate of Incorporation (CI)',lbl_br:'Business Registration No.',lbl_co_cn_name:'Company Name (Chinese)',
+    lbl_co_en_name:'Company Name (English)',lbl_co_en_addr:'Company Address (English)',
+    lbl_country:'Country / Region',lbl_province:'Province / State',lbl_city:'City',lbl_detail_addr:'Street Address',
+    lbl_biz_addr:'Operating Address',lbl_same_reg:'Same as registered address',lbl_autofill:'Auto-fill',
+    lbl_reg_addr_title:'Registration Address',ph_select:'Please select',ph_prov_first:'Select province/state first',ph_country_first:'Select country/region first',
+    lbl_ein_or_ci:'Company Registration No. or Employer ID (EIN)'
   }
 };
 function t(k){return (TL[lang]&&TL[lang][k])||TL.zh[k]||k;}
@@ -579,6 +825,7 @@ function applyLang(){
   bn=lang==='en'?bn_en:bn_zh;
   renderClist();
   if(document.getElementById('pg2').classList.contains('show'))renderP2();
+  if(document.getElementById('pg3').classList.contains('show')){renderDirUpload();renderUboUpload();}
   if(document.getElementById('pg4').classList.contains('show')){renderAuthDocUpload();renderAuthRole();renderAuthMethod();}
   document.getElementById('lang-btn').textContent=lang==='en'?'简体中文':'English';
 }
@@ -676,6 +923,58 @@ var mkOrGroup=function(id){
   var sub=isEn?'PNG/JPG/PDF, max 10 MB, up to 3 files':'PNG/JPG/PDF，不超过10MB，最多3个';
   function side(sid,name,desc,active){var cls=active?'or-side sel':'or-side unsel';var dot=active?'or-dot on':'or-dot';return '<div class="'+cls+'" id="'+id+'-'+sid+'" onclick="swOr(\''+id+'\',\''+sid+'\')"><div class="or-side-top"><div class="'+dot+'" id="'+id+'-d-'+sid+'"></div><div class="or-name">'+name+'</div></div><div class="or-desc">'+desc+'</div><div class="or-upload"><div style="display:flex;align-items:center;justify-content:center;gap:5px">'+UP+'<span class="or-upload-txt">'+upTxt+'</span></div><div class="or-upload-sub">'+sub+'</div></div></div>';}
   return '<div class="or-group"><div class="or-header">'+UP+'&nbsp;'+hdr+'<span class="ureq">*</span><span class="or-badge">'+badge+'</span></div><div class="or-cols">'+side('l',lName,lDesc,true)+'<div class="or-divider">OR</div>'+side('r',rName,rDesc,false)+'</div></div>';
+};
+
+// ── Country name helper for address selects ───────────────────
+function countryLabel(zh){
+  var m={'中国':'China','中国香港':'Hong Kong, China','英国':'United Kingdom','新加坡':'Singapore','美国':'United States','加拿大':'Canada','阿联酋':'UAE','澳大利亚':'Australia','日本':'Japan','其他':'Other'};
+  return lang==='en'&&m[zh]?m[zh]:zh;
+}
+
+// ── Lang-aware address form overrides ────────────────────────
+var mkAW=function(p,dk){
+  var d=dk==='w'?GW:GC[dk];
+  var co=Object.keys(d).map(function(c){return '<option>'+countryLabel(c)+'</option>';}).join('');
+  return '<div class="frow s3" style="margin-bottom:8px"><div class="fg"><label>'+t('lbl_country')+' <span>*</span></label><select id="'+p+'-c" onchange="addrL2(\''+p+'\',\''+dk+'\')"><option value="">'+t('ph_select')+'</option>'+co+'</select></div><div class="fg"><label>'+t('lbl_province')+' <span>*</span></label><select id="'+p+'-r" onchange="addrL3(\''+p+'\',\''+dk+'\')" disabled><option value="">'+t('ph_country_first')+'</option></select></div><div class="fg"><label>'+t('lbl_city')+' <span>*</span></label><select id="'+p+'-city" disabled><option value="">'+t('ph_prov_first')+'</option></select></div></div>';
+};
+var mkAF=function(p,cl,dk){
+  var d=GC[dk];
+  var ro=Object.keys(d).map(function(r){return '<option>'+r+'</option>';}).join('');
+  return '<div class="frow s3" style="margin-bottom:8px"><div class="fg"><label>'+t('lbl_country')+' <span>*</span></label><select disabled><option>'+cl+'</option></select></div><div class="fg"><label>'+t('lbl_province')+' <span>*</span></label><select id="'+p+'-r" onchange="addrL3(\''+p+'\',\''+dk+'\')"><option value="">'+t('ph_select')+'</option>'+ro+'</select></div><div class="fg"><label>'+t('lbl_city')+' <span>*</span></label><select id="'+p+'-city" disabled><option value="">'+t('ph_prov_first')+'</option></select></div></div>';
+};
+
+// ── Lang-aware basicF override ────────────────────────────────
+var basicF=function(k){
+  var ps='<option>'+t('ph_select')+'</option>';
+  var sp=ps+'<option>'+t('opt_longterm')+'</option><option>'+t('opt_fixed')+'</option>';
+  if(k==='cn') return '<div class="frow"><div class="fg"><label>'+t('lbl_uscc')+' <span>*</span></label><input placeholder="18位统一社会信用代码"></div><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_co_name')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div><div class="fg"><label>'+t('lbl_reg_date')+' <span>*</span></label><input type="date"></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_prov')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_reg_city_f')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_reg_addr')+' <span>*</span></label><input></div></div>';
+  if(k==='hk') return '<div class="frow"><div class="fg"><label>'+t('lbl_ci')+' <span>*</span></label><input></div><div class="fg"><label>'+t('lbl_br')+' <span>*</span></label><input placeholder="66668888-000-00-00-A"></div></div><div class="frow"><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_date')+' <span>*</span></label><input type="date"></div><div class="fg"><label>'+t('lbl_co_cn_name')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_reg_prov')+' <span>*</span></label><select><option>'+(lang==='en'?'Hong Kong SAR':'香港特别行政区')+'</option></select></div><div class="fg"><label>'+t('lbl_reg_city_f')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow s1"><div class="fg"><label>'+t('lbl_reg_addr')+' <span>*</span></label><input></div></div><div class="frow"><div class="fg"><label>'+t('lbl_co_en_name')+' <span>*</span></label><input></div><div class="fg"><label>'+t('lbl_co_en_addr')+' <span>*</span></label><input></div></div>';
+  var clMap={uk:lang==='en'?'United Kingdom':'英国',sg:lang==='en'?'Singapore':'新加坡',us:lang==='en'?'United States':'美国',ca:lang==='en'?'Canada':'加拿大',ae:lang==='en'?'UAE':'阿联酋'};
+  var cl=clMap[k]; var reg=mkAF('reg-'+k,cl,k); var biz=mkAW('biz-'+k,k); var top='';
+  if(k==='us'){
+    top=mkEIN('ein')+'<div class="frow"><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div></div>';
+  } else {
+    top='<div class="frow"><div class="fg"><label>'+t('lbl_ci')+' <span>*</span></label><input></div><div class="fg"><label>'+t('lbl_co_type')+' <span>*</span></label><select>'+ps+'</select></div></div><div class="frow"><div class="fg"><label>'+t('lbl_biz_period')+' <span>*</span></label><select>'+sp+'</select></div><div class="fg"></div></div>';
+  }
+  return top+'<div class="frow"><div class="fg"><label>'+t('lbl_reg_date')+' <span>*</span></label><input type="date"></div><div class="fg"><label>'+t('lbl_co_en_name')+' <span>*</span></label><input></div></div><div style="margin-bottom:5px;font-size:11px;color:#64748b;font-weight:500">'+t('lbl_reg_addr_title')+' <span style="color:#ef4444">*</span></div>'+reg+'<div class="frow s1" style="margin-bottom:10px"><div class="fg"><label>'+t('lbl_detail_addr')+' <span>*</span></label><input></div></div><div class="addr-box"><div class="addr-head"><div class="sdot"></div>'+t('lbl_biz_addr')+'&nbsp;<span style="font-size:11px;color:#94a3b8;font-weight:400">'+t('lbl_same_reg')+'</span><span class="addr-link">'+t('lbl_autofill')+'</span></div>'+biz+'<div class="fg" style="margin-top:8px"><label>'+t('lbl_detail_addr')+' <span>*</span></label><input></div></div>';
+};
+
+// ── Lang-aware dir/ubo upload overrides ──────────────────────
+var renderDirUpload=function(){
+  var sel=document.getElementById('dir-type'); if(!sel)return;
+  var v=sel.value; var l=sel.options[sel.selectedIndex].text;
+  var f=lang==='en'?'ID Front (Portrait side)':'身份证人像面';
+  var b=lang==='en'?'ID Back (Emblem side)':'身份证国徽面';
+  document.getElementById('dir-upload').innerHTML=v==='i'?pBox2(f,b):pBox(l);
+  document.getElementById('dir-addr').innerHTML=mkAW('da','w')+'<div class="frow s1" style="margin-top:8px;margin-bottom:0"><div class="fg"><label>'+t('lbl_detail_addr')+' <span>*</span></label><input></div></div>';
+};
+var renderUboUpload=function(){
+  var sel=document.getElementById('ubo-type'); if(!sel)return;
+  var v=sel.value; var l=sel.options[sel.selectedIndex].text;
+  var f=lang==='en'?'ID Front (Portrait side)':'身份证人像面';
+  var b=lang==='en'?'ID Back (Emblem side)':'身份证国徽面';
+  document.getElementById('ubo-upload').innerHTML=v==='i'?pBox2(f,b):pBox(l);
+  document.getElementById('ubo-addr').innerHTML=mkAW('ua','w')+'<div class="frow s1" style="margin-top:8px;margin-bottom:0"><div class="fg"><label>'+t('lbl_detail_addr')+' <span>*</span></label><input></div></div>';
 };
 
 var mkBiz=function(k){
