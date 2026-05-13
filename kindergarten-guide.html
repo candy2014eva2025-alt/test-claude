@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上海托育 & 幼儿园全面指南</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --primary: #2563EB;
+    --secondary: #7C3AED;
+    --accent: #059669;
+    --orange: #D97706;
+    --rose: #E11D48;
+    --sky: #0EA5E9;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --muted: #64748B;
+    --border: #E2E8F0;
+  }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: #0F172A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .presentation {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 48px 64px;
+    overflow: hidden;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active { display: flex; flex-direction: column; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(15,23,42,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50px;
+    padding: 10px 20px;
+    z-index: 100;
+  }
+
+  .nav button {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav button:hover { background: rgba(255,255,255,0.25); }
+
+  .nav .counter {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563EB, #7C3AED);
+    transition: width 0.3s ease;
+    z-index: 100;
+  }
+
+  /* =========== SLIDE STYLES =========== */
+
+  /* Slide 1 — Cover */
+  .slide-cover {
+    background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 40%, #0C1445 100%);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-cover::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .slide-cover::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .cover-badge {
+    background: rgba(99,102,241,0.2);
+    border: 1px solid rgba(99,102,241,0.4);
+    color: #A5B4FC;
+    font-size: 13px;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+  }
+
+  .cover-title {
+    font-size: 52px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .cover-title span { color: #818CF8; }
+
+  .cover-subtitle {
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+  }
+
+  .cover-tags {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cover-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.75);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  /* Slide 2 — TOC */
+  .slide-toc {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 8px;
+  }
+
+  .slide-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 32px;
+    line-height: 1.2;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+
+  .toc-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: transform 0.2s;
+  }
+
+  .toc-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #E2E8F0;
+    line-height: 1;
+    min-width: 40px;
+  }
+
+  .toc-content h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .toc-content p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .toc-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  /* Generic slide with light bg */
+  .slide-light {
+    background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+  }
+
+  .slide-purple { background: linear-gradient(135deg, #FAF5FF 0%, #EDE9FE 100%); }
+  .slide-green { background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%); }
+  .slide-orange { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); }
+  .slide-rose { background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 100%); }
+  .slide-dark { background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%); }
+
+  .content-area { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border: 1px solid var(--border);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .card-grid-2 { grid-template-columns: 1fr 1fr; }
+  .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .icon-blue { background: #EFF6FF; }
+  .icon-purple { background: #FAF5FF; }
+  .icon-green { background: #F0FDF4; }
+  .icon-orange { background: #FFFBEB; }
+  .icon-rose { background: #FFF1F2; }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .card-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  ul.feature-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  ul.feature-list li {
+    font-size: 13px;
+    color: #374151;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+  }
+
+  ul.feature-list li::before {
+    content: '·';
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-blue { background: #EFF6FF; color: #1D4ED8; }
+  .badge-green { background: #F0FDF4; color: #166534; }
+  .badge-orange { background: #FFFBEB; color: #92400E; }
+  .badge-rose { background: #FFF1F2; color: #9F1239; }
+  .badge-purple { background: #FAF5FF; color: #6B21A8; }
+
+  .price-tag {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+  }
+
+  .price-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Alert/info boxes */
+  .alert {
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.6;
+  }
+
+  .alert-blue { background: #EFF6FF; border-left: 3px solid var(--primary); color: #1E40AF; }
+  .alert-green { background: #F0FDF4; border-left: 3px solid var(--accent); color: #166534; }
+  .alert-orange { background: #FFFBEB; border-left: 3px solid var(--orange); color: #92400E; }
+  .alert-rose { background: #FFF1F2; border-left: 3px solid var(--rose); color: #9F1239; }
+
+  /* Table-like compare */
+  .compare-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+
+  .compare-row:last-child { border-bottom: none; }
+
+  .compare-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 10px 12px;
+    background: #F8FAFC;
+  }
+
+  .compare-cell {
+    font-size: 13px;
+    color: var(--text);
+    padding: 10px 14px;
+    line-height: 1.5;
+  }
+
+  /* Pros/Cons for early enrollment slide */
+  .pros-cons-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .pros-card {
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: 16px;
+    padding: 20px 24px;
+  }
+
+  .cons-card {
+    background: #FFF1F2;
+    border: 1px solid #FECDD3;
+    border-radius: 16px;
+    padding: 20px 24px;
+  }
+
+  .pros-cons-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pros-cons-title.pros { color: #166534; }
+  .pros-cons-title.cons { color: #9F1239; }
+
+  .pros-cons-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pros-cons-list li {
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .pros-cons-list li .dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .dot-pro { background: #D1FAE5; color: #065F46; }
+  .dot-con { background: #FFE4E6; color: #9F1239; }
+
+  /* Band type slide */
+  .band-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+
+  .band-card {
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .band-emoji { font-size: 40px; }
+  .band-title { font-size: 18px; font-weight: 700; }
+  .band-age { font-size: 13px; font-weight: 600; border-radius: 20px; padding: 3px 12px; }
+  .band-focus { font-size: 13px; font-weight: 600; }
+
+  .band-list {
+    list-style: none;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .band-list li {
+    font-size: 12px;
+    color: #374151;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .band-list li::before {
+    content: '›';
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Summary slide */
+  .slide-summary {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    flex: 1;
+  }
+
+  .summary-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+
+  .summary-card .s-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .summary-card p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+  }
+
+  .final-msg {
+    background: linear-gradient(90deg, rgba(99,102,241,0.2), rgba(16,185,129,0.2));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    margin-top: 16px;
+  }
+
+  /* Enrollment guide */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    flex: 1;
+  }
+
+  .guide-card {
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .guide-card .g-icon { font-size: 24px; }
+  .guide-card .g-title { font-size: 14px; font-weight: 700; }
+  .guide-card .g-desc { font-size: 12px; line-height: 1.6; }
+
+  /* Fee card */
+  .fee-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+
+  .fee-card {
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .fee-star { font-size: 24px; }
+  .fee-level { font-size: 16px; font-weight: 700; }
+  .fee-price { font-size: 36px; font-weight: 800; line-height: 1; }
+  .fee-unit { font-size: 12px; font-weight: 400; }
+  .fee-desc { font-size: 12px; line-height: 1.5; margin-top: 8px; }
+
+  /* Slide header */
+  .slide-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  .slide-chapter {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 6px;
+  }
+
+  .chapter-num {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0.06;
+    position: absolute;
+    right: 64px;
+    top: 48px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0 20px;
+  }
+
+  /* Keyboard shortcut hint */
+  .key-hint {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    z-index: 100;
+  }
+
+  /* ===== SLIDE SPECIFIC ===== */
+  .s-托育 { --accent-color: #7C3AED; }
+  .s-公立 { --accent-color: #2563EB; }
+  .s-民办 { --accent-color: #059669; }
+  .s-课程 { --accent-color: #D97706; }
+
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<div class="key-hint">← → 键翻页 · 共 <span id="total-count"></span> 页</div>
+
+<div class="presentation">
+
+  <!-- ===== SLIDE 1: COVER ===== -->
+  <div class="slide slide-cover active" data-slide="1">
+    <div class="cover-badge">上海市学前教育体系 · 家长必读手册 2025</div>
+    <div class="cover-title">上海托育 & <span>幼儿园</span><br>全面指南</div>
+    <div class="cover-subtitle">从托育到大班 · 公立 · 私立 · 选园攻略 · 一站式解读</div>
+    <div class="cover-tags">
+      <div class="cover-tag">🏠 托育园（0-3岁）</div>
+      <div class="cover-tag">🏫 公立幼儿园</div>
+      <div class="cover-tag">🎨 民办幼儿园</div>
+      <div class="cover-tag">📊 全方位对比</div>
+      <div class="cover-tag">⏰ 早入园利弊</div>
+      <div class="cover-tag">🗺 选园攻略</div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 2: TOC ===== -->
+  <div class="slide slide-light" data-slide="2">
+    <div class="slide-header">
+      <div>
+        <div class="section-label">Table of Contents</div>
+        <div class="slide-title">目 录</div>
+      </div>
+    </div>
+    <div class="toc-grid">
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">🏠</div>
+          <div class="toc-num">00</div>
+        </div>
+        <div class="toc-content">
+          <h3>托育园</h3>
+          <p>0-3岁托育服务介绍<br>普惠 · 市场化 · 幼儿园托班</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">🏫</div>
+          <div class="toc-num">01</div>
+        </div>
+        <div class="toc-content">
+          <h3>公立幼儿园</h3>
+          <p>示范园 · 一级园 · 二级园<br>收费标准 · 最新免费政策</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">🎨</div>
+          <div class="toc-num">02</div>
+        </div>
+        <div class="toc-content">
+          <h3>民办幼儿园</h3>
+          <p>普惠园 · 非普惠园<br>2025新政策解读</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">📚</div>
+          <div class="toc-num">03</div>
+        </div>
+        <div class="toc-content">
+          <h3>课程 & 师资 & 硬件</h3>
+          <p>公办 vs 民办全方位对比<br>外教配置 · 伙食标准</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">⏰</div>
+          <div class="toc-num">04</div>
+        </div>
+        <div class="toc-content">
+          <h3>早入园的利与弊</h3>
+          <p>提前入园的优势与挑战<br>不同年龄入园科学建议</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">👶</div>
+          <div class="toc-num">05</div>
+        </div>
+        <div class="toc-content">
+          <h3>班型介绍</h3>
+          <p>托班 · 小班 · 中班 · 大班<br>各阶段发展重点</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div>
+          <div class="toc-icon">📋</div>
+          <div class="toc-num">06</div>
+        </div>
+        <div class="toc-content">
+          <h3>入园攻略</h3>
+          <p>入园难度 · 报名规则<br>选园决策建议</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 3: 托育园 ===== -->
+  <div class="slide slide-purple" data-slide="3">
+    <div class="chapter-num">00</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 00 · Early Childcare</div>
+        <div class="slide-title" style="color:#5B21B6">托育园（0-3岁）</div>
+      </div>
+      <div class="alert alert-blue" style="max-width:340px">
+        <span>📌</span>
+        <span>由<strong>卫健委</strong>主管，不属于义务教育体系，与教育局主管的幼儿园性质不同，需分别报名</span>
+      </div>
+    </div>
+    <div class="card-grid card-grid-3" style="flex:1; align-items:start">
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-blue">🏛</div>
+          <div>
+            <div class="card-title">普惠性托育园</div>
+            <div class="card-subtitle">政府财政补贴</div>
+          </div>
+        </div>
+        <div class="price-tag">3,000–4,000<span style="font-size:14px;font-weight:400"> 元/月</span></div>
+        <div style="height:10px"></div>
+        <ul class="feature-list">
+          <li><strong>优点：</strong>政府扶持，价格亲民</li>
+          <li><strong>缺点：</strong>实际招收多为 2岁+ 宝宝</li>
+          <li>师生比 1:6 及以上，班级人数较多</li>
+          <li>人多易交叉感染，宝宝生病频率较高</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-purple">🏢</div>
+          <div>
+            <div class="card-title">市场化托育园</div>
+            <div class="card-subtitle">自主运营·优质服务</div>
+          </div>
+        </div>
+        <div class="price-tag">8,000–15,000<span style="font-size:14px;font-weight:400"> 元/月</span></div>
+        <div style="height:10px"></div>
+        <ul class="feature-list">
+          <li><strong>优点：</strong>环境与课程更丰富多元</li>
+          <li>师生比 1:2（最多 1:3），陪伴更专注</li>
+          <li>自主食堂，可个性化定制营养餐</li>
+          <li><strong>缺点：</strong>费用差异大，月费偏高</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-green">🌟</div>
+          <div>
+            <div class="card-title">幼儿园托育班</div>
+            <div class="card-subtitle">部分双语园额外开设</div>
+          </div>
+        </div>
+        <div class="price-tag" style="color:#059669">同市场化</div>
+        <div style="height:10px"></div>
+        <ul class="feature-list">
+          <li>部分双语/高端幼儿园额外开设</li>
+          <li>优缺点同市场化托育园</li>
+          <li>提前融入幼儿园环境，衔接更顺滑</li>
+          <li>可优先直升本园幼儿班</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="alert alert-green" style="margin-top:14px">
+      <span>👶</span>
+      <span><strong>入托年龄：</strong>最早满6个月，通常建议1岁+ &nbsp;·&nbsp; <strong>作息：</strong>全日托8:00-16:00，半日托可选 &nbsp;·&nbsp; <strong>卫生：</strong>须通过卫健委备案，定期检查</span>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 4: 公立园 - 收费 ===== -->
+  <div class="slide slide-light" data-slide="4">
+    <div class="chapter-num">01</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 01 · Public Kindergartens</div>
+        <div class="slide-title">公立幼儿园 — 概览与收费</div>
+      </div>
+    </div>
+    <div class="fee-cards">
+
+      <div class="fee-card" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:1px solid #FCD34D">
+        <div class="fee-star">★★★</div>
+        <div class="fee-level" style="color:#92400E">市级示范园</div>
+        <div style="color:#78350F;font-size:12px;margin-top:-4px">市/区教育局最高评定</div>
+        <div class="fee-price" style="color:#D97706">700<span class="fee-unit">元/月</span></div>
+        <ul class="feature-list" style="text-align:left;margin-top:8px">
+          <li>硬件完备：音乐室、美术室、科探室</li>
+          <li>教师100%持证，本科+，园长多为特级</li>
+          <li>自主研发特色课程，定期教研观摩</li>
+          <li>需人户一致 + 积分顺位</li>
+        </ul>
+      </div>
+
+      <div class="fee-card" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #BFDBFE">
+        <div class="fee-star" style="color:var(--primary)">★★</div>
+        <div class="fee-level" style="color:#1E40AF">市一级园</div>
+        <div style="color:#1D4ED8;font-size:12px;margin-top:-4px">区教育局评定</div>
+        <div class="fee-price" style="color:var(--primary)">225<span class="fee-unit">元/月</span></div>
+        <ul class="feature-list" style="text-align:left;margin-top:8px">
+          <li>五大领域均衡发展，游戏化教学</li>
+          <li>主班+配班+保育员，约30-35人/班</li>
+          <li>定期区级教研，师资培训有保障</li>
+          <li>积分 + 摇号方式为主</li>
+        </ul>
+      </div>
+
+      <div class="fee-card" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid #BBF7D0">
+        <div class="fee-star" style="color:var(--accent)">★</div>
+        <div class="fee-level" style="color:#166534">市二级园</div>
+        <div style="color:#15803D;font-size:12px;margin-top:-4px">街道/社区统筹管理</div>
+        <div class="fee-price" style="color:var(--accent)">175<span class="fee-unit">元/月</span></div>
+        <ul class="feature-list" style="text-align:left;margin-top:8px">
+          <li>执行国家《3-6岁学习与发展指南》</li>
+          <li>就近入学优先，基本保育教育需求</li>
+          <li>适合就近入园，无需远途接送</li>
+          <li>入园相对较易，部分门槛更低</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="alert alert-green" style="margin-top:14px">
+      <span>🎉</span>
+      <span><strong>最新政策（2024起）：</strong>公办幼儿园<strong>【大班】</strong>已实行免收保育教育费，未来该政策将逐步推广至中班、小班。目前上海已无三级园。</span>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 5: 民办园 ===== -->
+  <div class="slide slide-green" data-slide="5">
+    <div class="chapter-num">02</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 02 · Private Kindergartens</div>
+        <div class="slide-title" style="color:#166534">民办幼儿园 — 2025新政解读</div>
+      </div>
+    </div>
+    <div class="alert alert-green" style="margin-bottom:18px">
+      <span>🆕</span>
+      <span><strong>2025新政：</strong>上海民办园正式分为两大类——普惠性民办园保育费不超过 <strong>700元/月</strong>（与公办示范园同标准），大幅减轻家庭负担</span>
+    </div>
+    <div class="card-grid card-grid-2" style="flex:1">
+      <div class="card" style="border-top:3px solid var(--accent)">
+        <div class="card-header">
+          <div class="card-icon icon-green">🤝</div>
+          <div>
+            <div class="card-title">普惠性民办园</div>
+            <div class="card-subtitle">政府财政补贴 · 价格亲民</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;margin-bottom:14px">
+          <div><div class="price-label">托班</div><div class="price-tag" style="color:var(--accent);font-size:22px">3,000元</div></div>
+          <div><div class="price-label">小/中班</div><div class="price-tag" style="color:var(--accent);font-size:22px">700元</div></div>
+          <div><div class="price-label">大班</div><div class="price-tag" style="color:var(--accent);font-size:22px">免费</div></div>
+        </div>
+        <ul class="feature-list">
+          <li>政府财政补贴，面向大众家庭</li>
+          <li>招生不设户籍门槛，纳入普惠体系</li>
+          <li>课程以国家基础课程为主</li>
+          <li>是<strong>公办学位不足时的最优替代</strong></li>
+          <li>受政府监管，品质有基本保障</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--secondary)">
+        <div class="card-header">
+          <div class="card-icon icon-purple">🌍</div>
+          <div>
+            <div class="card-title">非普惠性民办园</div>
+            <div class="card-subtitle">自主定价 · 特色多元</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap">
+          <div><div class="price-label">双语园</div><div class="price-tag" style="color:var(--secondary);font-size:20px">1万+</div></div>
+          <div><div class="price-label">国际/字母园</div><div class="price-tag" style="color:var(--secondary);font-size:20px">1.5-2万+</div></div>
+        </div>
+        <ul class="feature-list">
+          <li>自主定价，课程个性化，特色鲜明</li>
+          <li>双语园：中英各50%授课</li>
+          <li>字母园/国际园：IB/蒙氏/瑞吉欧等</li>
+          <li>入园只看年龄，<strong>不看户籍积分</strong></li>
+          <li>幼小衔接强，为国际学校升学铺路</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 6: 课程 & 师资 对比 ===== -->
+  <div class="slide slide-orange" data-slide="6">
+    <div class="chapter-num">03</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 03 · Curriculum & Faculty</div>
+        <div class="slide-title" style="color:#92400E">课程 · 师资 · 硬件 全方位对比</div>
+      </div>
+    </div>
+
+    <div class="card" style="flex:1; overflow:auto">
+      <div style="display:grid;grid-template-columns:110px 1fr 1fr;background:#F8FAFC;border-radius:10px;overflow:hidden">
+        <div style="padding:10px 14px;background:#1E293B;color:white;font-size:13px;font-weight:700">对比维度</div>
+        <div style="padding:10px 14px;background:#1D4ED8;color:white;font-size:13px;font-weight:700;text-align:center">🏫 公立幼儿园</div>
+        <div style="padding:10px 14px;background:#7C3AED;color:white;font-size:13px;font-weight:700;text-align:center">🎨 民办幼儿园</div>
+
+        <div class="compare-label">课程依据</div>
+        <div class="compare-cell">《上海市学前教育课程指南》，禁止小学化，五大领域均衡发展</div>
+        <div class="compare-cell" style="border-left:1px solid var(--border)">自主设计园本课程，IB/蒙氏/瑞吉欧等，幼小衔接课程丰富</div>
+
+        <div class="compare-label" style="background:#F1F5F9">外语比重</div>
+        <div class="compare-cell" style="background:#F1F5F9">一般无外教，部分知名园有（如宋庆龄）</div>
+        <div class="compare-cell" style="background:#F1F5F9;border-left:1px solid var(--border)">双语园中英50/50；字母园全英文主班外教</div>
+
+        <div class="compare-label">师资稳定</div>
+        <div class="compare-cell">稳定性高，流动率低，编制保障，幼师证100%</div>
+        <div class="compare-cell" style="border-left:1px solid var(--border)">参差不齐，高端园相对稳定；外籍教师须持证</div>
+
+        <div class="compare-label" style="background:#F1F5F9">师生比</div>
+        <div class="compare-cell" style="background:#F1F5F9">约 1:25-35，老师额外行政任务较多</div>
+        <div class="compare-cell" style="background:#F1F5F9;border-left:1px solid var(--border)">小班化明显，部分班仅几人，投入更专注</div>
+
+        <div class="compare-label">硬件设施</div>
+        <div class="compare-cell">基础齐全，新园条件好；老园设备或较陈旧</div>
+        <div class="compare-cell" style="border-left:1px solid var(--border)">差异大：高端园豪华，普通民办参差不齐</div>
+
+        <div class="compare-label" style="background:#F1F5F9">伙食质量</div>
+        <div class="compare-cell" style="background:#F1F5F9">统一采购，安全监管透明，相对清淡规范</div>
+        <div class="compare-cell" style="background:#F1F5F9;border-left:1px solid var(--border)">整体更丰盛多样，监管不如公办，需实地考察</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 7: 早入园利弊 (NEW) ===== -->
+  <div class="slide slide-rose" data-slide="7">
+    <div class="chapter-num">04</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 04 · Early Enrollment</div>
+        <div class="slide-title" style="color:#9F1239">宝宝早日入园的利与弊</div>
+      </div>
+      <div class="badge badge-rose" style="font-size:13px;padding:6px 14px">新增章节</div>
+    </div>
+
+    <div class="pros-cons-grid">
+      <div class="pros-card">
+        <div class="pros-cons-title pros">✅ 早入园的优势</div>
+        <ul class="pros-cons-list">
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>社交能力发展更早：</strong>在集体环境中学习分享、合作、轮流等社会规则，为今后学习打下基础</div>
+          </li>
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>语言习得黄金窗口：</strong>尤其双语园，2-3岁是外语习得的最佳时期，语音模仿能力极强</div>
+          </li>
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>建立良好作息习惯：</strong>规律的园所生活有助于建立稳定的生活节律与自理能力</div>
+          </li>
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>释放家长压力：</strong>让父母有时间恢复工作，在职场保持竞争力，家庭经济更稳定</div>
+          </li>
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>激发学习兴趣：</strong>专业教师和结构化课程，比单纯家庭照护提供更丰富的认知刺激</div>
+          </li>
+          <li>
+            <div class="dot dot-pro">✓</div>
+            <div><strong>增强免疫系统：</strong>虽短期内易生病，但长远来看提前建立免疫力，小学后反而少生病</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="cons-card">
+        <div class="pros-cons-title cons">⚠️ 早入园的挑战与风险</div>
+        <ul class="pros-cons-list">
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>分离焦虑更强烈：</strong>2岁以下宝宝依恋关系尚未建立稳定，入园时的焦虑期通常比3岁入园更长</div>
+          </li>
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>生病频率高峰期：</strong>入园头半年频繁感冒、手足口等交叉感染，托班师生比低，传播更快</div>
+          </li>
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>自理能力尚不成熟：</strong>2岁宝宝往往还不能独立如厕、进食，对老师依赖度高，适应更难</div>
+          </li>
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>亲子依恋可能受影响：</strong>过早脱离主要照料者，若托育质量不高，可能影响安全型依恋的建立</div>
+          </li>
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>费用较高：</strong>优质托育园月费8,000-15,000元，普惠托育名额少，家庭经济压力大</div>
+          </li>
+          <li>
+            <div class="dot dot-con">!</div>
+            <div><strong>选园难度大：</strong>托育机构质量参差不齐，监管比幼儿园更分散，需家长花更多精力甄选</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert alert-orange" style="margin-top:14px">
+      <span>💡</span>
+      <span><strong>科学建议：</strong>世界卫生组织建议母乳喂养至少6个月，理想入托年龄为 <strong>1.5-2岁+</strong>（建议先走路稳、会说简单词汇后）。优先选择师生比低（1:3以下）、老师稳定的托育机构。</span>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 8: 班型 ===== -->
+  <div class="slide slide-light" data-slide="8">
+    <div class="chapter-num">05</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 05 · Class Types</div>
+        <div class="slide-title">班型介绍 — 2岁到6岁全覆盖</div>
+      </div>
+    </div>
+    <div class="band-grid">
+      <div class="band-card" style="background:linear-gradient(135deg,#FAF5FF,#EDE9FE);border:1px solid #C4B5FD">
+        <div class="band-emoji">👶</div>
+        <div class="band-title" style="color:#6D28D9">托 班</div>
+        <div class="band-age" style="background:#EDE9FE;color:#6D28D9">2 - 3 岁</div>
+        <div class="band-focus" style="color:#7C3AED">初入园 · 适应期</div>
+        <ul class="band-list">
+          <li>学会基本自理（如厕·进食）</li>
+          <li>建立安全感与信任感</li>
+          <li>感官探索为主，大运动发展</li>
+          <li>分离焦虑适应期 约1-3个月</li>
+          <li>师生比 ≤ 1:7（公办）</li>
+        </ul>
+      </div>
+
+      <div class="band-card" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #BFDBFE">
+        <div class="band-emoji">🧒</div>
+        <div class="band-title" style="color:#1D4ED8">小 班</div>
+        <div class="band-age" style="background:#DBEAFE;color:#1D4ED8">3 - 4 岁</div>
+        <div class="band-focus" style="color:#2563EB">习惯 · 语言</div>
+        <ul class="band-list">
+          <li>培养生活规律与行为习惯</li>
+          <li>语言表达能力快速发展</li>
+          <li>开始学会简单规则与秩序</li>
+          <li>游戏化学习为主要方式</li>
+          <li>班额约25-30人（公办）</li>
+        </ul>
+      </div>
+
+      <div class="band-card" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:1px solid #BBF7D0">
+        <div class="band-emoji">👦</div>
+        <div class="band-title" style="color:#15803D">中 班</div>
+        <div class="band-age" style="background:#DCFCE7;color:#15803D">4 - 5 岁</div>
+        <div class="band-focus" style="color:#059669">探索 · 社交</div>
+        <ul class="band-list">
+          <li>逻辑思维与想象力快速发展</li>
+          <li>同伴关系与合作意识增强</li>
+          <li>开始有规则意识和角色扮演</li>
+          <li>美术、音乐、科学探索活跃期</li>
+          <li>情绪管理能力逐步提升</li>
+        </ul>
+      </div>
+
+      <div class="band-card" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FDE68A">
+        <div class="band-emoji">🧑</div>
+        <div class="band-title" style="color:#B45309">大 班</div>
+        <div class="band-age" style="background:#FEF3C7;color:#B45309">5 - 6 岁</div>
+        <div class="band-focus" style="color:#D97706">衔接 · 自理</div>
+        <ul class="band-list">
+          <li>幼小衔接课程，学习准备能力</li>
+          <li>完全自理，责任心初步形成</li>
+          <li>逻辑思维·数学敏感期</li>
+          <li>专注力和坚持性显著提升</li>
+          <li>🎉 公办大班现已<strong>免收保育费</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 9: 入园攻略 ===== -->
+  <div class="slide slide-light" data-slide="9">
+    <div class="chapter-num">06</div>
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter">Chapter 06 · Enrollment Guide</div>
+        <div class="slide-title">入园难度 & 报名规则</div>
+      </div>
+    </div>
+    <div class="card-grid card-grid-2" style="flex:1">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-blue">🏫</div>
+          <div>
+            <div class="card-title">公立幼儿园入园</div>
+            <div class="card-subtitle"><span class="badge badge-rose">难度较高</span> 资源紧张，竞争激烈</div>
+          </div>
+        </div>
+        <ul class="feature-list">
+          <li><strong>核心条件：</strong>人户一致最优先，部分园「五年一户」</li>
+          <li><strong>录取方式：</strong>划片对口 → 积分顺位 → 超员摇号/统筹</li>
+          <li><strong>非沪籍：</strong>积分不足时难度大增，尤其黄浦、静安等热门区</li>
+          <li><strong>报名时间：</strong>每年3-5月，各区规则不同，提前关注</li>
+          <li><strong>注意：</strong>部分区可同报公民办，但被民办录取则不安排公办</li>
+        </ul>
+        <div class="alert alert-blue" style="margin-top:14px">
+          <span>📍</span>
+          <span><strong>虹口区案例：</strong>沪籍可报多所示范园+1所对口园+多所民办，但被民办录取后原则上不再安排公办入园</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon icon-purple">🎨</div>
+          <div>
+            <div class="card-title">民办幼儿园入园</div>
+            <div class="card-subtitle"><span class="badge badge-green">难度较低</span> 选择多，面向各类家庭</div>
+          </div>
+        </div>
+        <ul class="feature-list">
+          <li><strong>核心条件：</strong>年龄达标 + 基础证件（居住证/居住登记）</li>
+          <li><strong>录取方式：</strong>家庭意愿 + 经济能力，大多不看户籍积分</li>
+          <li><strong>非沪籍首选：</strong>无积分门槛，灵活度高</li>
+          <li><strong>报名时间：</strong>与公办同步，被民办录取则不再安排公办</li>
+          <li><strong>误区提醒：</strong>「同时报公民办」非双保险，需根据意愿慎重选择</li>
+        </ul>
+        <div class="alert alert-orange" style="margin-top:14px">
+          <span>⚠️</span>
+          <span>非沪籍家庭建议：① 冲普惠民办（≤700元/月）② 积分不足则直接锁定心仪民办，避免两头落空</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 10: 选园建议 ===== -->
+  <div class="slide slide-light" data-slide="10">
+    <div class="slide-header">
+      <div>
+        <div class="section-label">How to Choose · 决策指南</div>
+        <div class="slide-title">选园决策指南 — 怎么选最适合？</div>
+      </div>
+    </div>
+    <div class="guide-grid">
+
+      <div class="guide-card" style="background:#EFF6FF;border:1px solid #BFDBFE">
+        <div class="g-icon">🏅</div>
+        <div class="g-title" style="color:#1E40AF">情形 A<br>沪籍 + 人户一致</div>
+        <div class="g-desc" style="color:#1E40AF;opacity:0.8;font-weight:600">推荐：优先公办</div>
+        <div class="g-desc" style="color:#1D4ED8;margin-top:4px">对口园 / 宋庆龄 / 中福会 / 市立等<br><br>稳定、收费低、距离近，大多数无校车，就近接送便捷</div>
+      </div>
+
+      <div class="guide-card" style="background:#FAF5FF;border:1px solid #C4B5FD">
+        <div class="g-icon">🌍</div>
+        <div class="g-title" style="color:#6B21A8">情形 B<br>非沪籍 / 积分不足</div>
+        <div class="g-desc" style="color:#6B21A8;font-weight:600">推荐：优先民办</div>
+        <div class="g-desc" style="color:#7C3AED;margin-top:4px">① 冲普惠民办（≤700/月，最省钱安心）<br>② 积分够但担心统筹 → 普惠民办也是好选择<br><br>公办竞争激烈，民办门槛更低，选择更灵活</div>
+      </div>
+
+      <div class="guide-card" style="background:#FFFBEB;border:1px solid #FDE68A">
+        <div class="g-icon">💎</div>
+        <div class="g-title" style="color:#92400E">情形 C<br>经济好 + 重视课程</div>
+        <div class="g-desc" style="color:#92400E;font-weight:600">推荐：优质非普惠民办</div>
+        <div class="g-desc" style="color:#B45309;margin-top:4px">双语园 / 国际园 / 特色民办<br><br>个性化课程强，幼小衔接好，为民办小学 / 国际学校升学铺路</div>
+      </div>
+
+      <div class="guide-card" style="background:#F0FDF4;border:1px solid #BBF7D0">
+        <div class="g-icon">🔍</div>
+        <div class="g-title" style="color:#166534">通用建议<br>所有家庭适用</div>
+        <div class="g-desc" style="color:#166534;font-weight:600">实地考察 · 了解口碑</div>
+        <div class="g-desc" style="color:#15803D;margin-top:4px">关注招生政策 · 量力而行<br><br>最终需综合：<strong>地理位置 × 预算 × 孩子特质 × 升学规划</strong></div>
+      </div>
+
+    </div>
+    <div class="alert alert-blue" style="margin-top:16px">
+      <span>🌟</span>
+      <span>选园没有标准答案，最好的园是最适合你家孩子和家庭情况的园。建议入学前至少实地参观2-3所，感受园所氛围和老师互动方式。</span>
+    </div>
+  </div>
+
+  <!-- ===== SLIDE 11: 总结 ===== -->
+  <div class="slide slide-summary" data-slide="11">
+    <div class="slide-header">
+      <div>
+        <div class="slide-chapter" style="color:rgba(255,255,255,0.4)">Key Takeaways</div>
+        <div class="slide-title" style="color:white">核心要点总结</div>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="s-title">🏠 托育园（0-3岁）</div>
+        <p>卫健委主管，普惠/市场化/幼儿园托育班三类。建议1.5岁+入托，优先选师生比低（≤1:3）、老师稳定的机构</p>
+      </div>
+      <div class="summary-card">
+        <div class="s-title">🏫 公立幼儿园</div>
+        <p>示范700/一级225/二级175（元/月），大班已免费，三级园已取消。沪籍+人户一致最有优势</p>
+      </div>
+      <div class="summary-card">
+        <div class="s-title">🤝 普惠民办园</div>
+        <p>2025新政保育费≤700元/月，是公办不足的最优替代。托班3,000元/月，不设户籍门槛</p>
+      </div>
+      <div class="summary-card">
+        <div class="s-title">🌍 非普惠民办园</div>
+        <p>双语/字母/特色园，月费从数千到数万，个性化强，IB/蒙氏等多元课程，不看户籍积分</p>
+      </div>
+      <div class="summary-card">
+        <div class="s-title">⏰ 早入园利弊</div>
+        <p>利：社交语言早发展，建立规律，双语黄金期；弊：分离焦虑强，生病频繁，优质托育费用高。权衡家庭实际情况决策</p>
+      </div>
+      <div class="summary-card">
+        <div class="s-title">🗺 选园决策</div>
+        <p>沪籍人户一致→公办优先；非沪籍→普惠民办；重视课程→非普惠民办。所有家庭都应实地考察，综合判断</p>
+      </div>
+    </div>
+    <div class="final-msg">
+      🌟 了解体系 × 结合家庭 × 实地考察 × 理性决策 — 选园没有标准答案，最适合的才是最好的
+    </div>
+    <div style="text-align:center;color:rgba(255,255,255,0.25);font-size:12px;margin-top:14px">上海市学前教育体系 · 家长必读手册 2025</div>
+  </div>
+
+</div><!-- /presentation -->
+
+<div class="nav">
+  <button onclick="changeSlide(-1)" title="上一页">‹</button>
+  <span class="counter" id="counter">1 / 11</span>
+  <button onclick="changeSlide(1)" title="下一页">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  document.getElementById('total-count').textContent = total;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + total;
+    document.getElementById('progress').style.width = ((current + 1) / total * 100) + '%';
+  }
+
+  function changeSlide(dir) {
+    showSlide(current + dir);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  // Touch swipe
+  let touchX = 0;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+  document.addEventListener('touchend', e => {
+    const dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) changeSlide(dx > 0 ? 1 : -1);
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
