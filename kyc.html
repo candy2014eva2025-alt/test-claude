@@ -163,6 +163,9 @@ body{font-family:var(--font-sans);background:var(--color-background-tertiary);fo
 .face-tip{background:#f8fafc;border:1px solid #e9ecf0;border-radius:8px;padding:18px;text-align:center;font-size:12px;color:#64748b;line-height:1.7;margin-top:6px}
 .face-btn{display:inline-flex;align-items:center;gap:6px;background:#0B9DAF;color:#fff;border:none;border-radius:7px;padding:8px 18px;font-size:12px;cursor:pointer;font-family:inherit;margin-top:12px;font-weight:500}
 .face-btn:hover{background:#0a8fa0}
+.knote{font-size:10px;color:#475569;margin-top:6px;padding:5px 8px;background:#f1f5f9;border-radius:4px;line-height:1.6;border-left:2px solid #94a3b8}
+.ksup{font-size:10px;color:#854d0e;margin-top:4px;padding:5px 8px;background:#fef9c3;border-radius:4px;line-height:1.6;border-left:2px solid #fbbf24}
+.ksup-hd{font-size:10px;font-weight:600;color:#854d0e;margin-bottom:2px}
 </style>
 
 <h2 style="position:absolute;width:1px;height:1px;overflow:hidden">AssisTrade企业认证KYC</h2>
@@ -401,11 +404,36 @@ function swEIN(id,side){var ci=document.getElementById(id+'-ci');var ein=documen
 var kyc={
   cn:{name:'中国大陆企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['企业营业执照','法人证件照片（身份证 / 护照 / 香港永久居民身份证）','最终受益人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）']},{c:GR,t:'认证方式（三选一）',items:['手机号认证（仅限中国大陆二代身份证实名的手机号）','承诺函认证（需上传加盖公章的承诺函文件以及法人手持承诺函照片）','人脸识别认证']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
   hk:{name:'中国香港企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['注册证书CI','商业登记证BR','所有董事证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','最终受益人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）']},{c:GR,t:'认证方式（三选一）',items:['手机号认证','承诺函认证（需上传加盖公章的承诺函文件以及董事手持承诺函照片）','人脸识别认证']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（身份证 / 护照 / 香港永久居民身份证 / 其他证件）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及董事手持承诺函照片']}]},
-  uk:{name:'英国企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
-  sg:{name:'新加坡企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','商业登记证','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
-  us:{name:'美国企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','良好存续证明','公司章程','雇主识别号(EIN)验证信','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
-  ca:{name:'加拿大企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['公司注册证书CI（及历史更名证书，如适用）','公司章程','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]},
-  ae:{name:'迪拜企业认证所需材料',secs:[{c:T,t:'认证所需证件',items:['营业执照（以及历史更名证书，如适用）','公司章程','股东登记名册','董事登记名册','商业登记证','由董事签字并盖章的股权架构图（持股≥25%最终收益所有人；高风险客户需≥10%）','董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）']},{c:G,t:'认证所需业务和交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）','近6个月内的银行账户证明文件（逐个账户分别提供）']},{c:A,t:'若您为授权代理人，则另需',items:['授权代理人证件照片（护照 / 本地身份证）','授权委托书']},{c:A,t:'若使用承诺函认证方式，则另需',items:['加盖公司公章的承诺函文件以及法人手持承诺函照片']}]}
+  uk:{name:'英国企业认证所需材料',secs:[
+    {c:T,t:'公司注册证明',items:['公司注册证书（CI）及历史更名证书（如适用）','公司章程（Memorandum & Articles of Association）'],note:'格式：可从 companies-house.gov.uk 下载；接受数字版文件',sup:['COI原件不可用时，可提交经认可机构出具的等效替代文件']},
+    {c:G,t:'身份证明',items:['所有董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）；持股≥25%；高风险客户≥10%'],note:'格式：政府颁发的带照片及签名证件；原件复印件/扫描件/拍照件，清晰无伪造篡改'},
+    {c:A,t:'业务与交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）'],note:'营业地址格式：租赁合同或产权证明，或近3个月水电/物业账单（含商户名称及地址）',sup:['①营业地址与公司注册地一致的，仅提供1份证明文件','②实际经营地址在非英国的，需同时提供能证明该地址与英国公司关系的文件（如代运营协议）','③新商户无历史交易记录，可提交网站/平台推广证明']},
+    {c:GR,t:'结算账户',items:['近6个月内的银行账户证明文件（逐个账户分别提供）'],note:'格式：文件需显示公司主体名称、账号信息，带有银行LOGO或加盖银行章（对账单/开户信均可）'}
+  ]},
+  sg:{name:'新加坡企业认证所需材料',secs:[
+    {c:T,t:'公司注册证明',items:['公司注册证书（CI）及历史更名证书（如适用）','公司章程（Memorandum & Articles of Association）','商业登记证（Bizfile / Business Profile）'],note:'格式：可从 bizfile.gov.sg 下载；接受带 ACRA 数字签名的文件',sup:['COI原件不可用时，可提交经认可机构出具的等效替代文件']},
+    {c:G,t:'身份证明',items:['所有董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）；持股≥25%；高风险客户≥10%'],note:'格式：政府颁发的带照片及签名证件；原件复印件/扫描件/拍照件，清晰无伪造篡改'},
+    {c:A,t:'业务与交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）'],note:'营业地址格式：租赁合同或产权证明，或近3个月水电/物业账单（含商户名称及地址）',sup:['①营业地址与公司注册地一致的，仅提供1份证明文件','②实际经营地址在非新加坡的，需同时提供能证明该地址与新加坡公司关系的文件（如代运营协议）','③新商户无历史交易记录，可提交网站/平台推广证明']},
+    {c:GR,t:'结算账户',items:['近6个月内的银行账户证明文件（逐个账户分别提供）'],note:'格式：文件需显示公司主体名称、账号信息，带有银行LOGO或加盖银行章（对账单/开户信均可）'}
+  ]},
+  us:{name:'美国企业认证所需材料',secs:[
+    {c:T,t:'公司注册证明',items:['公司注册证书CI（及历史更名证书，如适用）','良好存续证明（Certificate of Good Standing）','公司章程（Bylaws / Operating Agreement）','EIN验证信（Employer Identification Number Verification Letter）','由董事签字并盖章的股权架构图（持股≥25%最终受益所有人；高风险客户需≥10%）'],note:'格式：可从各州州务卿官网下载（如 corp.delaware.gov 等）',sup:['COI原件不可用时，可提交经认可机构出具的等效替代文件']},
+    {c:G,t:'身份证明',items:['所有董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）；持股≥25%；高风险客户≥10%'],note:'格式：政府颁发的带照片及签名证件；原件复印件/扫描件/拍照件，清晰无伪造篡改'},
+    {c:A,t:'业务与交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）'],note:'营业地址格式：租赁合同或产权证明，或近3个月水电/物业账单（含商户名称及地址）',sup:['①营业地址与公司注册地一致的，仅提供1份证明文件','②实际经营地址在非美国的，需同时提供能证明该地址与美国公司关系的文件（如代运营协议）','③新商户无历史交易记录，可提交网站/平台推广证明']},
+    {c:GR,t:'结算账户',items:['近6个月内的银行账户证明文件（逐个账户分别提供）'],note:'格式：文件需显示公司主体名称、账号信息，带有银行LOGO或加盖银行章（对账单/开户信均可）'}
+  ]},
+  ca:{name:'加拿大企业认证所需材料',secs:[
+    {c:T,t:'公司注册证明',items:['公司注册证书CI（或合并证书 Certificate of Amalgamation，如适用）','公司章程（Articles of Incorporation）','由董事签字并盖章的股权架构图（持股≥25%最终受益所有人；高风险客户需≥10%）'],note:'格式：可从 ic.gc.ca 或各省公司事务系统下载',sup:['COI原件不可用时，可提交经认可机构出具的等效替代文件']},
+    {c:G,t:'身份证明',items:['所有董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）；持股≥25%；高风险客户≥10%'],note:'格式：政府颁发的带照片及签名证件；原件复印件/扫描件/拍照件，清晰无伪造篡改'},
+    {c:A,t:'业务与交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）'],note:'营业地址格式：租赁合同或产权证明，或近3个月水电/物业账单（含商户名称及地址）',sup:['①营业地址与公司注册地一致的，仅提供1份证明文件','②实际经营地址在非加拿大的，需同时提供能证明该地址与加拿大公司关系的文件（如代运营协议）','③新商户无历史交易记录，可提交网站/平台推广证明']},
+    {c:GR,t:'结算账户',items:['近6个月内的银行账户证明文件（逐个账户分别提供）'],note:'格式：文件需显示公司主体名称、账号信息，带有银行LOGO或加盖银行章（对账单/开户信均可）'}
+  ]},
+  ae:{name:'迪拜企业认证所需材料',secs:[
+    {c:T,t:'公司注册证明',items:['营业执照（Trade License）及历史更名证书（如适用）','公司章程（Memorandum of Association, MOA）','股东登记名册（Register of Shareholders）','董事登记名册（Register of Directors）','由董事签字并盖章的股权架构图（持股≥25%最终受益所有人；高风险客户需≥10%）'],note:'格式：可通过 DED / DMCC.ae Trade License Lookup 在线查验',sup:['COI原件不可用时，可提交经认可机构出具的等效替代文件']},
+    {c:G,t:'身份证明',items:['所有董事证件照片（护照 / 本地身份证）','最终受益人证件照片（护照 / 本地身份证）；持股≥25%；高风险客户≥10%'],note:'格式：政府颁发的带照片及签名证件；原件复印件/扫描件/拍照件，清晰无伪造篡改'},
+    {c:A,t:'业务与交易背景材料',items:['在有效期内的域名证明或有效店铺地址','网站/平台近六个月历史交易记录（含退款、拒付记录）','营业地址证明','PCI合规安全证书（如适用）'],note:'营业地址格式：租赁合同或产权证明，或近3个月水电/物业账单（含商户名称及地址）',sup:['①营业地址与公司注册地一致的，仅提供1份证明文件','②实际经营地址在非迪拜的，需同时提供能证明该地址与迪拜公司关系的文件（如代运营协议）','③新商户无历史交易记录，可提交网站/平台推广证明']},
+    {c:GR,t:'结算账户',items:['近6个月内的银行账户证明文件（逐个账户分别提供）'],note:'格式：文件需显示公司主体名称、账号信息，带有银行LOGO或加盖银行章（对账单/开户信均可）'}
+  ]}
 };
 
 var certUploads={
@@ -426,7 +454,7 @@ var bn={
   ae:'①营业地址与公司注册地一致的，仅提供1份营业地址证明文件；②实际经营地址在非迪拜内地，需同时提供：营业地址证明 + 能证明该营业地址与客户（迪拜公司）关系的文件。'
 };
 
-function bSecs(secs){var h=Math.ceil(secs.length/2);function fn(s){return '<div class="ksec"><div class="kh"><div class="kdot" style="background:'+s.c+'"></div>'+s.t+'</div>'+s.items.map(function(i){return '<div class="ki'+(i[0]==='①'||i[0]==='②'?' sub':'')+'">'+i+'</div>';}).join('')+'</div>';}return '<div class="two-col"><div class="kyc-box">'+secs.slice(0,h).map(fn).join('<div class="kdivhr"></div>')+'</div><div class="kyc-box">'+secs.slice(h).map(fn).join('<div class="kdivhr"></div>')+'</div></div>';}
+function bSecs(secs){var h=Math.ceil(secs.length/2);function fn(s){var items=s.items.map(function(i){return '<div class="ki'+(i[0]==='①'||i[0]==='②'||i[0]==='⓪'?' sub':'')+'">'+i+'</div>';}).join('');var note=s.note?'<div class="knote">'+s.note+'</div>':'';var supHd=typeof lang!=='undefined'&&lang==='en'?'Supplementary Notes':'补充说明';var sup=s.sup&&s.sup.length?'<div class="ksup"><div class="ksup-hd">'+supHd+'</div>'+s.sup.map(function(i){return '<div style="margin-top:2px">'+i+'</div>';}).join('')+'</div>':'';return '<div class="ksec"><div class="kh"><div class="kdot" style="background:'+s.c+'"></div>'+s.t+'</div>'+items+note+sup+'</div>';}return '<div class="two-col"><div class="kyc-box">'+secs.slice(0,h).map(fn).join('<div class="kdivhr"></div>')+'</div><div class="kyc-box">'+secs.slice(h).map(fn).join('<div class="kdivhr"></div>')+'</div></div>';}
 
 function basicF(k){
   if(k==='cn')return '<div class="frow"><div class="fg"><label>统一社会信用代码 <span>*</span></label><input placeholder="18位统一社会信用代码"></div><div class="fg"><label>企业类型 <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业名称 <span>*</span></label><input placeholder="请输入企业名称"></div></div><div class="frow"><div class="fg"><label>营业期限 <span>*</span></label><select><option>长期</option><option>有限期</option></select></div><div class="fg"><label>企业注册日期 <span>*</span></label><input type="date"></div></div><div class="frow"><div class="fg"><label>企业注册地址（省） <span>*</span></label><select><option>请选择</option></select></div><div class="fg"><label>企业注册地址（市） <span>*</span></label><select><option>请选择</option></select></div></div><div class="frow s1"><div class="fg"><label>企业注册详细地址 <span>*</span></label><input placeholder="输入企业注册详细地址"></div></div>';
@@ -502,34 +530,34 @@ var kyc_en={
     {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
   ]},
   uk:{name:'United Kingdom — Required KYC Documents',secs:[
-    {c:T,t:'Required Documents',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Articles of Association','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
-    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
-    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
-    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+    {c:T,t:'Company Registration Proof',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Memorandum & Articles of Association'],note:'Format: Download from companies-house.gov.uk; digital versions accepted',sup:['If original CI is unavailable, an equivalent substitute document issued by a recognized authority may be provided']},
+    {c:G,t:'Identity Proof',items:['All director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID) — ≥25% shareholders; ≥10% for high-risk'],note:'Format: Government-issued photo ID with signature; clear copy/scan/photo, no tampering'},
+    {c:A,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)'],note:'Address format: Lease/title deed or utility/property bills within 3 months (showing company name & address)',sup:['① One proof suffices if business address matches registered address','② Operations outside the UK: also provide a document linking the address to your UK entity (e.g. signed outsourcing agreement)','③ New merchants without transaction history may submit website/platform promotional proof']},
+    {c:GR,t:'Settlement Account',items:['6-month bank statements (per account)'],note:'Format: Must show company name, account number, and bank logo or official stamp (statement or account-opening letter)'}
   ]},
   sg:{name:'Singapore — Required KYC Documents',secs:[
-    {c:T,t:'Required Documents',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Articles of Association','Business Registration Certificate','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
-    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
-    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
-    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
+    {c:T,t:'Company Registration Proof',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Memorandum & Articles of Association','Business Registration Certificate (Bizfile / Business Profile)'],note:'Format: Download from bizfile.gov.sg; documents with ACRA digital signature accepted',sup:['If original CI is unavailable, an equivalent substitute document issued by a recognized authority may be provided']},
+    {c:G,t:'Identity Proof',items:['All director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID) — ≥25% shareholders; ≥10% for high-risk'],note:'Format: Government-issued photo ID with signature; clear copy/scan/photo, no tampering'},
+    {c:A,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)'],note:'Address format: Lease/title deed or utility/property bills within 3 months (showing company name & address)',sup:['① One proof suffices if business address matches registered address','② Operations outside Singapore: also provide a document linking the address to your Singapore entity (e.g. signed outsourcing agreement)','③ New merchants without transaction history may submit website/platform promotional proof']},
+    {c:GR,t:'Settlement Account',items:['6-month bank statements (per account)'],note:'Format: Must show company name, account number, and bank logo or official stamp (statement or account-opening letter)'}
   ]},
   us:{name:'United States — Required KYC Documents',secs:[
-    {c:T,t:'Required Documents',items:['CI + name change cert (if applicable)','Certificate of Good Standing','Articles of Incorporation','EIN verification letter','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
-    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
-    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
-    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+    {c:T,t:'Company Registration Proof',items:['Certificate of Incorporation (CI) + name change cert (if applicable)','Certificate of Good Standing','Articles of Incorporation (Bylaws / Operating Agreement)','EIN Verification Letter','Signed ownership structure chart (≥25% UBOs; ≥10% for high-risk)'],note:'Format: Download from the Secretary of State website for each state (e.g. corp.delaware.gov)',sup:['If original CI is unavailable, an equivalent substitute document issued by a recognized authority may be provided']},
+    {c:G,t:'Identity Proof',items:['All director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID) — ≥25% shareholders; ≥10% for high-risk'],note:'Format: Government-issued photo ID with signature; clear copy/scan/photo, no tampering'},
+    {c:A,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)'],note:'Address format: Lease/title deed or utility/property bills within 3 months (showing company name & address)',sup:['① One proof suffices if business address matches registered address','② Operations outside the US: also provide a document linking the address to your US entity (e.g. signed outsourcing agreement)','③ New merchants without transaction history may submit website/platform promotional proof']},
+    {c:GR,t:'Settlement Account',items:['6-month bank statements (per account)'],note:'Format: Must show company name, account number, and bank logo or official stamp (statement or account-opening letter)'}
   ]},
   ca:{name:'Canada — Required KYC Documents',secs:[
-    {c:T,t:'Required Documents',items:['CI + name change cert (if applicable)','Articles of Incorporation','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
-    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
-    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
-    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + legal rep photo holding pledge']}
+    {c:T,t:'Company Registration Proof',items:['Certificate of Incorporation (CI) or Certificate of Amalgamation (if applicable)','Articles of Incorporation','Signed ownership structure chart (≥25% UBOs; ≥10% for high-risk)'],note:'Format: Download from ic.gc.ca or the provincial corporate registry system',sup:['If original CI is unavailable, an equivalent substitute document issued by a recognized authority may be provided']},
+    {c:G,t:'Identity Proof',items:['All director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID) — ≥25% shareholders; ≥10% for high-risk'],note:'Format: Government-issued photo ID with signature; clear copy/scan/photo, no tampering'},
+    {c:A,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)'],note:'Address format: Lease/title deed or utility/property bills within 3 months (showing company name & address)',sup:['① One proof suffices if business address matches registered address','② Operations outside Canada: also provide a document linking the address to your Canadian entity (e.g. signed outsourcing agreement)','③ New merchants without transaction history may submit website/platform promotional proof']},
+    {c:GR,t:'Settlement Account',items:['6-month bank statements (per account)'],note:'Format: Must show company name, account number, and bank logo or official stamp (statement or account-opening letter)'}
   ]},
   ae:{name:'Dubai — Required KYC Documents',secs:[
-    {c:T,t:'Required Documents',items:['Trade License + name change cert (if applicable)','Memorandum of Association','Register of Shareholders','Register of Directors','Commercial Registration Certificate','Signed ownership structure chart (≥25% UBOs; ≥10% high-risk)','Director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID)']},
-    {c:G,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)','6-month bank statements (per account)']},
-    {c:A,t:'If applying via authorized agent, also required',items:['Agent ID (Passport / Local ID)','Power of Attorney']},
-    {c:A,t:'If using pledge letter, also required',items:['Company-sealed pledge letter + director photo holding pledge']}
+    {c:T,t:'Company Registration Proof',items:['Trade License + name change cert (if applicable)','Memorandum of Association (MOA)','Register of Shareholders','Register of Directors','Signed ownership structure chart (≥25% UBOs; ≥10% for high-risk)'],note:'Format: Verifiable via DED / DMCC.ae Trade License Lookup online',sup:['If original Trade License is unavailable, an equivalent substitute document issued by a recognized authority may be provided']},
+    {c:G,t:'Identity Proof',items:['All director IDs (Passport / Local ID)','UBO IDs (Passport / Local ID) — ≥25% shareholders; ≥10% for high-risk'],note:'Format: Government-issued photo ID with signature; clear copy/scan/photo, no tampering'},
+    {c:A,t:'Business & Transaction Materials',items:['Valid domain proof or active shop URL','6-month transaction history (incl. refunds & chargebacks)','Business address proof','PCI DSS certificate (if applicable)'],note:'Address format: Lease/title deed or utility/property bills within 3 months (showing company name & address)',sup:['① One proof suffices if business address matches registered address','② Operations outside Dubai/UAE: also provide a document linking the address to your Dubai entity (e.g. signed outsourcing agreement)','③ New merchants without transaction history may submit website/platform promotional proof']},
+    {c:GR,t:'Settlement Account',items:['6-month bank statements (per account)'],note:'Format: Must show company name, account number, and bank logo or official stamp (statement or account-opening letter)'}
   ]}
 };
 var certUploads_en={
